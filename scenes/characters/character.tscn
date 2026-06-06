@@ -1,9 +1,19 @@
 [gd_scene format=3 uid="uid://8sw41tbjmjyy"]
 
-[ext_resource type="Script" uid="uid://dgq4mboghea1g" path="res://Character.cs" id="1_rkhd4"]
+[ext_resource type="Script" uid="uid://dgq4mboghea1g" path="res://scripts/Character.cs" id="1_rkhd4"]
 [ext_resource type="Texture2D" uid="uid://d0jo43xa8ljw5" path="res://assets/art/characters/shadow.png" id="2_lrhn5"]
 
+[sub_resource type="Animation" id="Animation_1bdar"]
+resource_name = "idle"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_e22cc"]
+_data = {
+&"idle": SubResource("Animation_1bdar")
+}
+
 [node name="Character" type="CharacterBody2D" unique_id=1715215883]
+collision_layer = 0
+collision_mask = 0
 script = ExtResource("1_rkhd4")
 speed = 5.0
 
@@ -17,3 +27,4 @@ offset = Vector2(-7, 0)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1480655924]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1862445129]
+libraries/ = SubResource("AnimationLibrary_e22cc")
