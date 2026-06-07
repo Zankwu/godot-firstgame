@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dgq4mboghea1g" path="res://scripts/Character.cs" id="1_rkhd4"]
 [ext_resource type="Texture2D" uid="uid://d0jo43xa8ljw5" path="res://assets/art/characters/shadow.png" id="2_lrhn5"]
+[ext_resource type="PackedScene" uid="uid://c0jg2op1s8sj" path="res://scenes/colliders/damage_emitter.tscn" id="3_e22cc"]
 
 [sub_resource type="Animation" id="Animation_1bdar"]
 resource_name = "idle"
@@ -28,3 +29,7 @@ offset = Vector2(-7, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1862445129]
 libraries/ = SubResource("AnimationLibrary_e22cc")
+
+[node name="DamageEmitter" parent="." unique_id=1541520471 instance=ExtResource("3_e22cc")]
+
+[editable path="DamageEmitter"]
