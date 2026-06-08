@@ -24,14 +24,16 @@ public partial class Character : CharacterBody2D
 	private AnimationPlayer animationPlayer;
 
 	private Area2D damageEmitter;
+	private Sprite2D playerBody;
 
 	public override void _Ready()
 	{
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		playerBody = GetNode<Sprite2D>("CharacterSprite");
 		GD.Print(animationPlayer);
-		damageEmitter =  GetNode<Area2D>("DamageEmitter");
-		damageEmitter.Connect("area_entered", new Callable(this, nameof(OnEmitCompleted)));
-		damageEmitter.Connect("area_entered",new Callable(this,nameof(tempEmit)));
+		damageEmitter = GetNode<Area2D>("DamageEmitter");
+		//碰到后调用OnEmitCompleted
+		damageEmitter.AreaEntered += OnEmitCompleted;
 	}
 
     
@@ -41,6 +43,7 @@ public partial class Character : CharacterBody2D
 		HandleInput();
 		HandleMove();
 		HandleAnimationChange();
+		FlipSprites();
 		MoveAndSlide();
 
 	}
@@ -84,11 +87,23 @@ public partial class Character : CharacterBody2D
 		}
 		else if (currentState == State.punch)
 		{
-
 			animationPlayer.Play("punch");
 		}
 	}
 
+	public void FlipSprites()
+	{
+		
+			if (Input.GetAxis("left", "right") > 0)
+			{
+				playerBody.FlipH=false;
+				damageEmitter.Scale= new Vector2(1, damageEmitter.Scale.Y);
+			}else if(Input.GetAxis("left", "right")<0)
+			{
+				damageEmitter.Scale= new Vector2(-1, damageEmitter.Scale.Y);
+				playerBody.FlipH=true;
+			}
+	}
 	public bool CanAttack()
 	{
 
@@ -109,16 +124,11 @@ public partial class Character : CharacterBody2D
 	}
 
 
-	public void OnEmitCompleted(DamageReceiver temp)
+	public void OnEmitCompleted(Area2D temp)
 	{
-		temp.EmitSignal("DamageReceived", damage);
-		GD.Print(temp);
-	}
-
-	public void tempEmit(Area2D temp)
-	{
-		temp.EmitSignal("TempEx", temp);
+		GD.Print($"1碰到后调用{temp}");
+		
+		temp.EmitSignal("DamageCompleted", damage,GlobalPosition);
 		
 	}
-
 }

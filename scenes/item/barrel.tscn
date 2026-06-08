@@ -11,6 +11,60 @@ height = 12.000002
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ubecq"]
 size = Vector2(10, 10)
 
+[sub_resource type="Animation" id="Animation_ubecq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_xbdmv"]
+resource_name = "destoryed"
+length = 0.15
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [1, 1]
+}
+
+[sub_resource type="Animation" id="Animation_jukkn"]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ppxt0"]
+_data = {
+&"RESET": SubResource("Animation_ubecq"),
+&"destoryed": SubResource("Animation_xbdmv"),
+&"idle": SubResource("Animation_jukkn")
+}
+
 [node name="Barrel" type="StaticBody2D" unique_id=1603968216]
 collision_layer = 8
 collision_mask = 0
@@ -33,5 +87,11 @@ collision_layer = 64
 [node name="CollisionShape2D" parent="DamageReceiver" index="0" unique_id=2147298208]
 position = Vector2(0, -14)
 shape = SubResource("RectangleShape2D_ubecq")
+
+[node name="DestoryedTtimer" type="Timer" parent="." unique_id=1589387623]
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1072401234]
+libraries/ = SubResource("AnimationLibrary_ppxt0")
 
 [editable path="DamageReceiver"]

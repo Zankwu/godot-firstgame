@@ -121,7 +121,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yewv4"]
-size = Vector2(10.5, 7.5)
+size = Vector2(10.5, 6)
 
 [node name="Player" unique_id=1715215883 instance=ExtResource("1_3vyb7")]
 collision_layer = 2
@@ -146,10 +146,11 @@ libraries/ = SubResource("AnimationLibrary_dyp2m")
 autoplay = &"idle"
 
 [node name="DamageEmitter" parent="." index="4" unique_id=1541520471]
+position = Vector2(0, -12)
 collision_mask = 96
 
 [node name="CollisionShape2D" parent="DamageEmitter" index="0" unique_id=712822009]
-position = Vector2(10.75, -13)
+position = Vector2(10, 0)
 shape = SubResource("RectangleShape2D_yewv4")
 
 [editable path="DamageEmitter"]
