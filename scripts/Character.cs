@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 public partial class Character : CharacterBody2D
@@ -10,22 +11,45 @@ public partial class Character : CharacterBody2D
 	public int damage;
 	[Export]
 	public float speed;
+	[Export]
+	public float jumpPwoer;
 
-	private enum State
+	public float height = 0;
+	public float heightSpeed;
+
+	public enum State
 	{
 		idle,
 		walk,
-		punch
+		punch,
+		takeOff,
+		jump,
+		land,
+		jumpKick
 
 	}
 
-	private State currentState = State.idle;
+	protected  Dictionary<State, string> stateAnima = new()
+	{
+		{State.idle,"idle"},
+		{State.walk,"walk"},
+		{State.punch,"punch"},
+		{State.takeOff,"takeOff"},
+		{State.jump,"jump"},
+		{State.land,"land"},
+		{State.jumpKick,"jumpKick"},
+	};
 
-	private AnimationPlayer animationPlayer;
+	protected State currentState = State.idle;
 
-	private Area2D damageEmitter;
-	private Sprite2D playerBody;
-	
+	protected  AnimationPlayer animationPlayer;
+
+	protected  Area2D damageEmitter;
+	//玩家精灵
+	protected  Sprite2D playerBody;
+
+	protected  const int GRAVITY = 600;
+
 	public override void _Ready()
 	{
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
@@ -34,33 +58,50 @@ public partial class Character : CharacterBody2D
 		damageEmitter = GetNode<Area2D>("DamageEmitter");
 		//碰到后调用OnEmitCompleted
 		damageEmitter.AreaEntered += OnEmitCompleted;
+
+		//跳跃力度
+		jumpPwoer = 150;
 	}
-
-
 
 	public override void _PhysicsProcess(double delta)
 	{
 		HandleInput();
-		HandleMove();
+		HandleMove(delta);
 		HandleAnimationChange();
 		FlipSprites();
 		MoveAndSlide();
-
 	}
 
-	public void HandleInput()
+	public virtual void HandleInput()
 	{
-		var direction = Input.GetVector("left", "right", "up", "down");
-		Velocity = direction * speed;
-		if (Input.IsActionJustPressed("attack") && CanAttack())
+		// var direction = Input.GetVector("left", "right", "up", "down");
+		// Velocity = direction * speed;
+
+		// if (CanPunch() && Input.IsActionJustPressed("attack"))
+		// {
+		// 	currentState = State.punch;
+		// }
+
+		// if (CanJump() && Input.IsActionJustPressed("jump"))
+		// {
+		// 		heightSpeed = jumpPwoer;
+		// 		currentState = State.takeOff;
+		// }
+		// if (CanJumpKick() && Input.IsActionJustPressed("attack"))
+		// {
+		// 	currentState = State.jumpKick;
+
+		// }
+	}
+
+	public void HandleMove(double delta)
+	{
+		if (currentState == State.punch)
 		{
-			currentState = State.punch;
-
+			Velocity = Vector2.Zero;
+			GD.Print("1");
+			return;
 		}
-	}
-
-	public void HandleMove()
-	{
 		if (CanMove())
 		{
 			if (Velocity == Vector2.Zero)
@@ -70,26 +111,28 @@ public partial class Character : CharacterBody2D
 			else
 				currentState = State.walk;
 		}
-		else
-			Velocity = Vector2.Zero;
+		if (currentState == State.jump || currentState == State.jumpKick)
+		{
+			height += heightSpeed * (float)delta;
+			if (height < 0)
+			{
+				currentState = State.land;
+				height = 0;
+			}
+			else
+			{
+				heightSpeed -= GRAVITY * (float)delta;
+			}
 
+
+			playerBody.Position = Vector2.Up * height;
+		}
 	}
 
 
 	public void HandleAnimationChange()
 	{
-		if (currentState == State.idle)
-		{
-			animationPlayer.Play("idle");
-		}
-		else if (currentState == State.walk)
-		{
-			animationPlayer.Play("walk");
-		}
-		else if (currentState == State.punch)
-		{
-			animationPlayer.Play("punch");
-		}
+		animationPlayer.Play(stateAnima[currentState]);
 	}
 
 	public void FlipSprites()
@@ -106,22 +149,44 @@ public partial class Character : CharacterBody2D
 			playerBody.FlipH = true;
 		}
 	}
-	public bool CanAttack()
+	public bool CanPunch()
 	{
-
-
 		return currentState == State.idle || currentState == State.walk;
+	}
 
-
+	public bool CanJumpKick()
+	{
+		return currentState == State.jump;
 	}
 	public bool CanMove()
 	{
 		return currentState == State.idle || currentState == State.walk;
 	}
-
-
-	public void completedAction()
+	public bool CanJump()
 	{
+		return currentState == State.idle || currentState == State.walk;
+	}
+
+
+	public void completedIdleAction()
+	{
+		GD.Print("✅ completedIdleAction 被调用！");
+		currentState = State.idle;
+	}
+	public void completedTakeOffAction()
+	{
+		GD.Print("✅ completedTakeOffAction 被调用！");
+		currentState = State.jump;
+	}
+	public void completedJumpAction()
+	{
+		GD.Print("✅ completedJumpAction 被调用！");
+		currentState = State.land;
+	}
+
+	public void completedLandAction()
+	{
+		GD.Print("✅ completedLandAction 被调用！");
 		currentState = State.idle;
 	}
 

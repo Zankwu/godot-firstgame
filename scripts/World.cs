@@ -17,6 +17,7 @@ public partial class World : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		//TODO 相机跟着对象走，不往回走
 		if(player.Position.X > camera.Position.X)
 		{
 			camera.Position = new Vector2(player.Position.X,camera.Position.Y);

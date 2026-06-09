@@ -63,8 +63,7 @@ public partial class Barrel : StaticBody2D
 		}
 
 	}
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-
+	// TODO 接收到信号后调用
 	public void OnDamageCompleted(int damage, Vector2 vector2)
 	{
 		if (currentState == State.idle)

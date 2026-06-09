@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://buknjq7fojvjm"]
 
 [ext_resource type="Texture2D" uid="uid://b6b1e8h3d0rgl" path="res://assets/art/props/barrel.png" id="1_gcxa4"]
-[ext_resource type="Script" uid="uid://tsluxbfola6i" path="res://scenes/item/Barrel.cs" id="1_ubecq"]
+[ext_resource type="Script" uid="uid://tsluxbfola6i" path="res://scripts/Barrel.cs" id="1_ubecq"]
 [ext_resource type="PackedScene" uid="uid://v077waentgji" path="res://scenes/colliders/damage_receiver.tscn" id="2_h111q"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gcxa4"]
@@ -87,9 +87,6 @@ collision_layer = 64
 [node name="CollisionShape2D" parent="DamageReceiver" index="0" unique_id=2147298208]
 position = Vector2(0, -14)
 shape = SubResource("RectangleShape2D_ubecq")
-
-[node name="DestoryedTtimer" type="Timer" parent="." unique_id=1589387623]
-one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1072401234]
 libraries/ = SubResource("AnimationLibrary_ppxt0")

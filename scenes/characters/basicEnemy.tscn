@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://urnuf5mv7ih5"]
+
+[ext_resource type="PackedScene" uid="uid://8sw41tbjmjyy" path="res://scenes/characters/character.tscn" id="1_bsqqu"]
+[ext_resource type="Texture2D" uid="uid://dcldheiy6r7j2" path="res://assets/art/characters/enemy_punk.png" id="2_31of2"]
+[ext_resource type="Script" uid="uid://blrdllvg6o0ri" path="res://scripts/BasicEnemy.cs" id="2_tt8k1"]
+
+[sub_resource type="Animation" id="Animation_31of2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_tt8k1"]
+resource_name = "idle"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_j2ndh"]
+resource_name = "walk"
+length = 0.8
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [10, 11, 12, 13, 14, 15, 16, 17]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rb6qd"]
+_data = {
+&"RESET": SubResource("Animation_31of2"),
+&"idle": SubResource("Animation_tt8k1"),
+&"walk": SubResource("Animation_j2ndh")
+}
+
+[node name="Character" unique_id=1715215883 instance=ExtResource("1_bsqqu")]
+script = ExtResource("2_tt8k1")
+health = 20
+damage = 2
+speed = 25.0
+
+[node name="CharacterSprite" parent="." index="1" unique_id=1849311222]
+texture = ExtResource("2_31of2")
+centered = false
+offset = Vector2(-24, -48)
+hframes = 10
+vframes = 10
+
+[node name="AnimationPlayer" parent="." index="3" unique_id=1862445129]
+libraries/ = SubResource("AnimationLibrary_rb6qd")
+
+[editable path="DamageEmitter"]
+[editable path="damage_receiver"]
