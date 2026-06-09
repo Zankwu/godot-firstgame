@@ -25,7 +25,7 @@ public partial class Character : CharacterBody2D
 
 	private Area2D damageEmitter;
 	private Sprite2D playerBody;
-
+	
 	public override void _Ready()
 	{
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
@@ -36,9 +36,9 @@ public partial class Character : CharacterBody2D
 		damageEmitter.AreaEntered += OnEmitCompleted;
 	}
 
-    
 
-    public override void _PhysicsProcess(double delta)
+
+	public override void _PhysicsProcess(double delta)
 	{
 		HandleInput();
 		HandleMove();
@@ -69,7 +69,8 @@ public partial class Character : CharacterBody2D
 			}
 			else
 				currentState = State.walk;
-		}else
+		}
+		else
 			Velocity = Vector2.Zero;
 
 	}
@@ -93,16 +94,17 @@ public partial class Character : CharacterBody2D
 
 	public void FlipSprites()
 	{
-		
-			if (Input.GetAxis("left", "right") > 0)
-			{
-				playerBody.FlipH=false;
-				damageEmitter.Scale= new Vector2(1, damageEmitter.Scale.Y);
-			}else if(Input.GetAxis("left", "right")<0)
-			{
-				damageEmitter.Scale= new Vector2(-1, damageEmitter.Scale.Y);
-				playerBody.FlipH=true;
-			}
+
+		if (Input.GetAxis("left", "right") > 0)
+		{
+			playerBody.FlipH = false;
+			damageEmitter.Scale = new Vector2(1, damageEmitter.Scale.Y);
+		}
+		else if (Input.GetAxis("left", "right") < 0)
+		{
+			damageEmitter.Scale = new Vector2(-1, damageEmitter.Scale.Y);
+			playerBody.FlipH = true;
+		}
 	}
 	public bool CanAttack()
 	{
@@ -127,8 +129,8 @@ public partial class Character : CharacterBody2D
 	public void OnEmitCompleted(Area2D temp)
 	{
 		GD.Print($"1碰到后调用{temp}");
-		
-		temp.EmitSignal("DamageCompleted", damage,GlobalPosition);
-		
+
+		temp.EmitSignal("DamageCompleted", damage, GlobalPosition);
+
 	}
 }

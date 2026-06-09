@@ -16,85 +16,99 @@ public partial class Barrel : StaticBody2D
 	//速度
 	private Vector2 velocity = Vector2.Zero;
 
-	private State currentState;
+	private Sprite2D barrelSprte2D;
+
+	//高度
+	private double height = 0.0;
+	//下降速率
+	private double heightSpeed = 0.0;
 	//桶的状态
+	private State currentState;
+	//重力
+	private const int GRAVITY = 600;
 	enum State
 	{
 		idle,
 		destroyed,
 	}
-	private Timer time;
 
-	private bool isMoveing = false;
 
 	public override void _Ready()
 	{
 		damageRece = GetNode<DamageReceiver>("DamageReceiver");
+		barrelSprte2D = GetNode<Sprite2D>("Sprite2D");
 		damageRece.DamageCompleted += OnDamageCompleted;
 		currentState = State.idle;
-		time = GetNode<Timer>("DestoryedTtimer");
 		barrelAnimation = GetNode<AnimationPlayer>("AnimationPlayer");
 	}
-
 	public override void _Process(double delta)
 	{
-
 		BarrelDestroyed(delta);
 		BarrelAnimationHandler();
-
-
+		FallingHandle(delta);
 	}
 	public void BarrelDestroyed(double delta)
 	{
-		if (currentState == State.destroyed && isMoveing == false)
+		if (currentState == State.destroyed)
 		{
-			time.WaitTime = 1;
-			time.Start();
-			GD.Print("开始移动");
-			isMoveing = true;
+			barrelSprte2D.Frame = 1;
 		}
-		if (isMoveing == true)
-		{
-			Position += velocity * (float)delta;
-			GD.Print(Position);
-			if (time.TimeLeft <= 0)
-			{
-				isMoveing = false;
-				currentState = State.idle;
-				QueueFree();
-				GD.Print("jeishu移动");
-			}
-		}
-
 	}
 
 	public void BarrelAnimationHandler()
 	{
 		if (currentState == State.destroyed)
 		{
-			barrelAnimation.Play("destoryed");
+			// barrelAnimation.Play("destoryed");
 		}
-		
+
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 
 	public void OnDamageCompleted(int damage, Vector2 vector2)
 	{
+		if (currentState == State.idle)
+		{
+			currentState = State.destroyed;
+			heightSpeed = knockBack * 2;
+		}
 		//判断是从左还是从右打得
-		GD.Print(vector2, GlobalPosition);
-		if (vector2.X < GlobalPosition.X)
-		{
+		var direction = vector2.X - Position.X;
 
-			velocity = Vector2.Right * knockBack;
-			velocity += Vector2.Up * knockBack;
-			currentState = State.destroyed;
-		}
-		else if (vector2.X > GlobalPosition.X)
+		if (direction > 0)
 		{
-
 			velocity = Vector2.Left * knockBack;
-			currentState = State.destroyed;
 		}
-		GD.Print(vector2);
+		else if (direction < 0)
+		{
+			velocity = Vector2.Right * knockBack;
+		}
+		
+	}
+
+	//TODO 这是桶子移动操作
+	public void FallingHandle(double delta)
+	{
+
+		if (currentState == State.destroyed)
+		{
+			height += heightSpeed * delta;
+			if (height < 0)
+			{
+				height = 0;
+				QueueFree();
+			}
+			else
+			{
+				heightSpeed -= GRAVITY * delta;
+				
+			}
+			GD.Print($"heightSpeed:{heightSpeed},{height}");
+			Position += velocity * (float)delta;
+			barrelSprte2D.Position = Vector2.Up * (float)height;
+			
+		}
+
+
 	}
 }
