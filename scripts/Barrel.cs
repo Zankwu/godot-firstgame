@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Barrel : StaticBody2D
+public partial class Barrel : StaticBody2D , IDamageable
 {
 
 
@@ -110,4 +110,10 @@ public partial class Barrel : StaticBody2D
 
 
 	}
+
+    public void TakeDamage(int damage, Vector2 position)
+    {
+        throw new NotImplementedException();
+    }
+
 }

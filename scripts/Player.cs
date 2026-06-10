@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Player : Character
+public partial class Player : Character 
 {
 	public override void HandleInput()
 	{

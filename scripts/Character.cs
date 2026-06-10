@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-public partial class Character : CharacterBody2D
+public partial class Character : CharacterBody2D ,IDamageable
 {
 	[Export]
 	public int health;
@@ -29,7 +29,7 @@ public partial class Character : CharacterBody2D
 
 	}
 
-	protected  Dictionary<State, string> stateAnima = new()
+	protected Dictionary<State, string> stateAnima = new()
 	{
 		{State.idle,"idle"},
 		{State.walk,"walk"},
@@ -42,13 +42,17 @@ public partial class Character : CharacterBody2D
 
 	protected State currentState = State.idle;
 
-	protected  AnimationPlayer animationPlayer;
+	protected AnimationPlayer animationPlayer;
 
-	protected  Area2D damageEmitter;
+	//伤害发射器
+	protected Area2D damageEmitter;
+	// 伤害接受器
+	protected DamageReceiver damageReceiver;
+
 	//玩家精灵
-	protected  Sprite2D playerBody;
+	protected Sprite2D playerBody;
 
-	protected  const int GRAVITY = 600;
+	protected const int GRAVITY = 600;
 
 	public override void _Ready()
 	{
@@ -56,9 +60,14 @@ public partial class Character : CharacterBody2D
 		playerBody = GetNode<Sprite2D>("CharacterSprite");
 		GD.Print(animationPlayer);
 		damageEmitter = GetNode<Area2D>("DamageEmitter");
+		damageReceiver = GetNode<DamageReceiver>("damage_receiver");
 		//碰到后调用OnEmitCompleted
 		damageEmitter.AreaEntered += OnEmitCompleted;
 
+		damageEmitter.BodyEntered += OnEmitCompleted;
+
+		damageReceiver.DamageCompleted += OnReceiverCompleted;
+																
 		//跳跃力度
 		jumpPwoer = 150;
 	}
@@ -170,32 +179,42 @@ public partial class Character : CharacterBody2D
 
 	public void completedIdleAction()
 	{
-		GD.Print("✅ completedIdleAction 被调用！");
 		currentState = State.idle;
 	}
 	public void completedTakeOffAction()
 	{
-		GD.Print("✅ completedTakeOffAction 被调用！");
 		currentState = State.jump;
 	}
 	public void completedJumpAction()
 	{
-		GD.Print("✅ completedJumpAction 被调用！");
 		currentState = State.land;
 	}
 
 	public void completedLandAction()
 	{
-		GD.Print("✅ completedLandAction 被调用！");
 		currentState = State.idle;
 	}
 
-
-	public void OnEmitCompleted(Area2D temp)
+	//伤害发射器
+	public void OnEmitCompleted(Node2D temp)
 	{
-		GD.Print($"1碰到后调用{temp}");
 
-		temp.EmitSignal("DamageCompleted", damage, GlobalPosition);
+
+		if (temp.GetParent() is IDamageable damageable)
+        {
+            temp.EmitSignal("DamageCompleted", damage, GlobalPosition);
+        }
+	}
+
+	public void OnReceiverCompleted(int damage, Vector2 vector2)
+	{
+		GD.Print($"1碰到后调用{damage}");
 
 	}
+
+    public void TakeDamage(int damage, Vector2 position)
+    {
+        throw new NotImplementedException();
+    }
+
 }

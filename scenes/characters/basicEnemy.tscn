@@ -4,6 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://dcldheiy6r7j2" path="res://assets/art/characters/enemy_punk.png" id="2_31of2"]
 [ext_resource type="Script" uid="uid://blrdllvg6o0ri" path="res://scripts/BasicEnemy.cs" id="2_tt8k1"]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tt8k1"]
+radius = 2.0
+height = 12.0
+
 [sub_resource type="Animation" id="Animation_31of2"]
 length = 0.001
 tracks/0/type = "value"
@@ -60,7 +64,14 @@ _data = {
 &"walk": SubResource("Animation_j2ndh")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tt8k1"]
+size = Vector2(8, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j2ndh"]
+size = Vector2(11, 14.25)
+
 [node name="Character" unique_id=1715215883 instance=ExtResource("1_bsqqu")]
+collision_layer = 32
 script = ExtResource("2_tt8k1")
 health = 20
 damage = 2
@@ -73,8 +84,23 @@ offset = Vector2(-24, -48)
 hframes = 10
 vframes = 10
 
+[node name="CollisionShape2D" parent="." index="2" unique_id=1480655924]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_tt8k1")
+
 [node name="AnimationPlayer" parent="." index="3" unique_id=1862445129]
 libraries/ = SubResource("AnimationLibrary_rb6qd")
+
+[node name="CollisionShape2D" parent="DamageEmitter" parent_id_path=PackedInt32Array(1541520471) index="0" unique_id=712822009]
+position = Vector2(10, -11)
+shape = SubResource("RectangleShape2D_tt8k1")
+
+[node name="damage_receiver" parent="." index="5" unique_id=1402504911]
+collision_layer = 32
+
+[node name="CollisionShape2D" parent="damage_receiver" index="0" unique_id=2147298208]
+position = Vector2(0.5, -10.875)
+shape = SubResource("RectangleShape2D_j2ndh")
 
 [editable path="DamageEmitter"]
 [editable path="damage_receiver"]
