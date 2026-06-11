@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Barrel : StaticBody2D , IDamageable
+public partial class Barrel : StaticBody2D
 {
 
 
@@ -64,7 +64,7 @@ public partial class Barrel : StaticBody2D , IDamageable
 
 	}
 	// TODO 接收到信号后调用
-	public void OnDamageCompleted(int damage, Vector2 vector2)
+	public void OnDamageCompleted(int damage, Vector2 direction)
 	{
 		if (currentState == State.idle)
 		{
@@ -72,17 +72,10 @@ public partial class Barrel : StaticBody2D , IDamageable
 			heightSpeed = knockBack * 2;
 		}
 		//判断是从左还是从右打得
-		var direction = vector2.X - Position.X;
 
-		if (direction > 0)
-		{
-			velocity = Vector2.Left * knockBack;
-		}
-		else if (direction < 0)
-		{
-			velocity = Vector2.Right * knockBack;
-		}
-		
+		velocity = direction * knockBack;
+
+
 	}
 
 	//TODO 这是桶子移动操作
@@ -100,20 +93,12 @@ public partial class Barrel : StaticBody2D , IDamageable
 			else
 			{
 				heightSpeed -= GRAVITY * delta;
-				
+
 			}
 			GD.Print($"heightSpeed:{heightSpeed},{height}");
 			Position += velocity * (float)delta;
 			barrelSprte2D.Position = Vector2.Up * (float)height;
-			
 		}
-
-
 	}
-
-    public void TakeDamage(int damage, Vector2 position)
-    {
-        throw new NotImplementedException();
-    }
 
 }

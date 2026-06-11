@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-public partial class Character : CharacterBody2D ,IDamageable
+public partial class Character : CharacterBody2D
 {
 	[Export]
 	public int health;
@@ -13,20 +13,15 @@ public partial class Character : CharacterBody2D ,IDamageable
 	public float speed;
 	[Export]
 	public float jumpPwoer;
-
 	public float height = 0;
 	public float heightSpeed;
 
+	//击退值
+	[Export]
+	public float Knockback = 50f;
 	public enum State
 	{
-		idle,
-		walk,
-		punch,
-		takeOff,
-		jump,
-		land,
-		jumpKick
-
+		idle, walk, punch, takeOff, jump, land, jumpKick, hurt
 	}
 
 	protected Dictionary<State, string> stateAnima = new()
@@ -38,36 +33,40 @@ public partial class Character : CharacterBody2D ,IDamageable
 		{State.jump,"jump"},
 		{State.land,"land"},
 		{State.jumpKick,"jumpKick"},
+		{State.hurt,"hurt"},
 	};
 
 	protected State currentState = State.idle;
 
-	protected AnimationPlayer animationPlayer;
+
 
 	//伤害发射器
 	protected Area2D damageEmitter;
 	// 伤害接受器
 	protected DamageReceiver damageReceiver;
 
+
 	//玩家精灵
-	protected Sprite2D playerBody;
+	protected Sprite2D playerSprite2D;
+	//玩家动画
+	protected AnimationPlayer animationPlayer;
+
+
 
 	protected const int GRAVITY = 600;
 
 	public override void _Ready()
 	{
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		playerBody = GetNode<Sprite2D>("CharacterSprite");
+		playerSprite2D = GetNode<Sprite2D>("CharacterSprite");
 		GD.Print(animationPlayer);
 		damageEmitter = GetNode<Area2D>("DamageEmitter");
 		damageReceiver = GetNode<DamageReceiver>("damage_receiver");
 		//碰到后调用OnEmitCompleted
 		damageEmitter.AreaEntered += OnEmitCompleted;
-
-		damageEmitter.BodyEntered += OnEmitCompleted;
-
 		damageReceiver.DamageCompleted += OnReceiverCompleted;
-																
+
+
 		//跳跃力度
 		jumpPwoer = 150;
 	}
@@ -134,7 +133,8 @@ public partial class Character : CharacterBody2D ,IDamageable
 			}
 
 
-			playerBody.Position = Vector2.Up * height;
+			playerSprite2D
+	.Position = Vector2.Up * height;
 		}
 	}
 
@@ -149,13 +149,15 @@ public partial class Character : CharacterBody2D ,IDamageable
 
 		if (Input.GetAxis("left", "right") > 0)
 		{
-			playerBody.FlipH = false;
+			playerSprite2D
+	.FlipH = false;
 			damageEmitter.Scale = new Vector2(1, damageEmitter.Scale.Y);
 		}
 		else if (Input.GetAxis("left", "right") < 0)
 		{
 			damageEmitter.Scale = new Vector2(-1, damageEmitter.Scale.Y);
-			playerBody.FlipH = true;
+			playerSprite2D
+	.FlipH = true;
 		}
 	}
 	public bool CanPunch()
@@ -198,23 +200,19 @@ public partial class Character : CharacterBody2D ,IDamageable
 	//伤害发射器
 	public void OnEmitCompleted(Node2D temp)
 	{
-
-
-		if (temp.GetParent() is IDamageable damageable)
-        {
-            temp.EmitSignal("DamageCompleted", damage, GlobalPosition);
-        }
+		var direction = Position.X - temp.GlobalPosition.X < 0 ? Vector2.Right : Vector2.Left;
+		temp.EmitSignal("DamageCompleted", damage, direction);
 	}
 
-	public void OnReceiverCompleted(int damage, Vector2 vector2)
+	public void OnReceiverCompleted(int damageTemp, Vector2 direction)
 	{
-		GD.Print($"1碰到后调用{damage}");
-
+		GD.Print($"dire:{direction}");
+		health -= damageTemp;
+		currentState = State.hurt;
+		Velocity = Knockback * direction;
+		if (health <= 0)
+		{
+			QueueFree();
+		}
 	}
-
-    public void TakeDamage(int damage, Vector2 position)
-    {
-        throw new NotImplementedException();
-    }
-
 }

@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://8sw41tbjmjyy" path="res://scenes/characters/character.tscn" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://db0rl38qe5siy" path="res://scripts/Player.cs" id="2_76oj4"]
 [ext_resource type="Texture2D" uid="uid://cxg8d6qg72u72" path="res://assets/art/characters/player.png" id="2_yewv4"]
+[ext_resource type="PackedScene" uid="uid://un0rgm5xrqk3" path="res://scenes/enemy_slot.tscn" id="4_dyp2m"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_76oj4"]
 radius = 2.0
@@ -236,6 +237,9 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yewv4"]
 size = Vector2(10.5, 6)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_76oj4"]
+size = Vector2(7, 7)
+
 [node name="Player" unique_id=1715215883 instance=ExtResource("1_3vyb7")]
 collision_layer = 2
 collision_mask = 9
@@ -266,6 +270,27 @@ collision_mask = 96
 [node name="CollisionShape2D" parent="DamageEmitter" index="0" unique_id=712822009]
 position = Vector2(10, 0)
 shape = SubResource("RectangleShape2D_yewv4")
+
+[node name="damage_receiver" parent="." index="5" unique_id=1402504911]
+collision_mask = 16
+
+[node name="CollisionShape2D" parent="damage_receiver" index="0" unique_id=2147298208]
+position = Vector2(0.5, -18.5)
+shape = SubResource("RectangleShape2D_76oj4")
+
+[node name="EnemySlots" type="Node2D" parent="." index="6" unique_id=1574088523]
+
+[node name="EnemySlot3" parent="EnemySlots" index="0" unique_id=1787459939 instance=ExtResource("4_dyp2m")]
+position = Vector2(13, -3)
+
+[node name="EnemySlot4" parent="EnemySlots" index="1" unique_id=165489805 instance=ExtResource("4_dyp2m")]
+position = Vector2(13, 3)
+
+[node name="EnemySlot5" parent="EnemySlots" index="2" unique_id=108249647 instance=ExtResource("4_dyp2m")]
+position = Vector2(-14, -3)
+
+[node name="EnemySlot6" parent="EnemySlots" index="3" unique_id=232924203 instance=ExtResource("4_dyp2m")]
+position = Vector2(-14, 3)
 
 [editable path="DamageEmitter"]
 [editable path="damage_receiver"]
