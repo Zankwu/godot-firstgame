@@ -226,10 +226,8 @@ public partial class Character : CharacterBody2D
 		}
 		else
 		{
-			
 			currentState = State.hurt;
 		}
-
 		Velocity = Knockback * direction;
 		if (currentHealth <= 0)
 		{
