@@ -13,16 +13,15 @@ public partial class EnemySlot : Node2D
 		return occupant == null;
 	}
 
-	public void FreeSlot()
-	{
-		occupant = null;
-	}
-
-	public void setEnemy(BasicEnemy enemy)
+	public void setSlot(BasicEnemy enemy)
 	{
 		occupant = enemy;
 	}
 
+	public void FreeSlot()
+	{
+		occupant = null;
+	}
 
 }
 

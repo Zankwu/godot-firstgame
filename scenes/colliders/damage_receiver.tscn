@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://v077waentgji"]
 
-[ext_resource type="Script" uid="uid://xhg835krlx3h" path="res://scenes/colliders/DamageReceiver.cs" id="1_rt1h8"]
+[ext_resource type="Script" uid="uid://cjwb0xnvb46tm" path="res://scripts/DamageReceiver.cs" id="1_rt1h8"]
 
 [node name="damage_receiver" type="Area2D" unique_id=1402504911]
 collision_layer = 0

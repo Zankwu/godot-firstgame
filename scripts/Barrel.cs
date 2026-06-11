@@ -64,7 +64,7 @@ public partial class Barrel : StaticBody2D
 
 	}
 	// TODO 接收到信号后调用
-	public void OnDamageCompleted(int damage, Vector2 direction)
+	public void OnDamageCompleted(int damage, Vector2 direction,int hitTypeInt)
 	{
 		if (currentState == State.idle)
 		{

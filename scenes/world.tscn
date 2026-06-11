@@ -43,7 +43,16 @@ position = Vector2(50, 44)
 position = Vector2(90, 47)
 
 [node name="Character" parent="Node2D" unique_id=194633409 instance=ExtResource("5_71j4m")]
-position = Vector2(87, 63)
+position = Vector2(64, 73)
 
 [node name="Character2" parent="Node2D" unique_id=2052158546 instance=ExtResource("5_71j4m")]
-position = Vector2(8, 62)
+position = Vector2(10, 62)
+
+[node name="Character3" parent="Node2D" unique_id=1322339061 instance=ExtResource("5_71j4m")]
+position = Vector2(32, 76)
+
+[node name="Character4" parent="Node2D" unique_id=1613316556 instance=ExtResource("5_71j4m")]
+position = Vector2(79, 50)
+
+[node name="Character5" parent="Node2D" unique_id=1921147044 instance=ExtResource("5_71j4m")]
+position = Vector2(20, 40)

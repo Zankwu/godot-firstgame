@@ -7,6 +7,7 @@ public partial class Character : CharacterBody2D
 {
 	[Export]
 	public int health;
+	public int currentHealth;
 	[Export]
 	public int damage;
 	[Export]
@@ -19,9 +20,12 @@ public partial class Character : CharacterBody2D
 	//击退值
 	[Export]
 	public float Knockback = 50f;
+	[Export]
+	private float knockDown;
+
 	public enum State
 	{
-		idle, walk, punch, takeOff, jump, land, jumpKick, hurt
+		idle, walk, punch, takeOff, jump, land, jumpKick, hurt, fall, grounded
 	}
 
 	protected Dictionary<State, string> stateAnima = new()
@@ -34,6 +38,8 @@ public partial class Character : CharacterBody2D
 		{State.land,"land"},
 		{State.jumpKick,"jumpKick"},
 		{State.hurt,"hurt"},
+		{State.fall,"fall"},
+		{State.grounded,"grounded"},
 	};
 
 	protected State currentState = State.idle;
@@ -50,9 +56,6 @@ public partial class Character : CharacterBody2D
 	protected Sprite2D playerSprite2D;
 	//玩家动画
 	protected AnimationPlayer animationPlayer;
-
-
-
 	protected const int GRAVITY = 600;
 
 	public override void _Ready()
@@ -65,10 +68,9 @@ public partial class Character : CharacterBody2D
 		//碰到后调用OnEmitCompleted
 		damageEmitter.AreaEntered += OnEmitCompleted;
 		damageReceiver.DamageCompleted += OnReceiverCompleted;
-
-
 		//跳跃力度
 		jumpPwoer = 150;
+		currentHealth = health;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -85,7 +87,7 @@ public partial class Character : CharacterBody2D
 		// var direction = Input.GetVector("left", "right", "up", "down");
 		// Velocity = direction * speed;
 
-		// if (CanPunch() && Input.IsActionJustPressed("attack"))
+		// if (Canpunch() && Input.IsActionJustPressed("attack"))
 		// {
 		// 	currentState = State.punch;
 		// }
@@ -117,24 +119,29 @@ public partial class Character : CharacterBody2D
 				currentState = State.idle;
 			}
 			else
-				currentState = State.walk;
+				currentState = State.walk
+	;
 		}
-		if (currentState == State.jump || currentState == State.jumpKick)
+
+		if (currentState == State.jump || currentState == State.jumpKick || currentState == State.fall)
 		{
 			height += heightSpeed * (float)delta;
 			if (height < 0)
 			{
-				currentState = State.land;
+				
 				height = 0;
+				if (currentState == State.fall)
+				{
+					currentState = State.grounded;
+				}
+				else
+					currentState = State.land;
 			}
 			else
 			{
 				heightSpeed -= GRAVITY * (float)delta;
 			}
-
-
-			playerSprite2D
-	.Position = Vector2.Up * height;
+			playerSprite2D.Position = Vector2.Up * height;
 		}
 	}
 
@@ -200,17 +207,31 @@ public partial class Character : CharacterBody2D
 	//伤害发射器
 	public void OnEmitCompleted(Node2D temp)
 	{
+		var hitType = DamageReceiver.HitType.NORMAL;
 		var direction = Position.X - temp.GlobalPosition.X < 0 ? Vector2.Right : Vector2.Left;
-		temp.EmitSignal("DamageCompleted", damage, direction);
+		if (currentState == State.jumpKick)
+		{
+			hitType = DamageReceiver.HitType.KNOCKDOWN;
+		}
+		temp.EmitSignal("DamageCompleted", damage, direction, (int)hitType);
 	}
 
-	public void OnReceiverCompleted(int damageTemp, Vector2 direction)
+	public virtual void OnReceiverCompleted(int damageTemp, Vector2 direction, int hitTypeInt)
 	{
-		GD.Print($"dire:{direction}");
-		health -= damageTemp;
-		currentState = State.hurt;
+		currentHealth -= damageTemp;
+		if (currentHealth <= 0 || hitTypeInt == 1)
+		{
+			currentState = State.fall;
+			heightSpeed = knockDown;
+		}
+		else
+		{
+			
+			currentState = State.hurt;
+		}
+
 		Velocity = Knockback * direction;
-		if (health <= 0)
+		if (currentHealth <= 0)
 		{
 			QueueFree();
 		}

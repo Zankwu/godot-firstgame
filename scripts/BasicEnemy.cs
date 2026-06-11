@@ -18,7 +18,6 @@ public partial class BasicEnemy : Character
 
 	public override void HandleInput()
 	{
-
 		if (player != null && CanMove())
 		{
 			if (playerSlot == null)
@@ -27,9 +26,28 @@ public partial class BasicEnemy : Character
 			}
 			if (playerSlot != null)
 			{
-				var direction = (playerSlot.GlobalPosition - GlobalPosition).Normalized();
-				Velocity = direction * speed;
+				var direciton = (playerSlot.GlobalPosition - this.GlobalPosition).Normalized();
+				if ((playerSlot.GlobalPosition - this.GlobalPosition).Length() < 1)
+				{
+					Velocity = Vector2.Zero;
+				}
+				else
+				{
+					Velocity = direciton * speed;
+
+				}
 			}
 		}
 	}
+	public override void OnReceiverCompleted(int damageTemp, Vector2 direction,int hitTypeInt)
+	{
+		base.OnReceiverCompleted(damageTemp,direction,hitTypeInt);
+		GD.Print(currentHealth);
+		if(currentHealth <= 0)
+		{
+			playerSlot.FreeSlot();
+			
+		}
+	}
+
 }

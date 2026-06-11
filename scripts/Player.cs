@@ -12,13 +12,14 @@ public partial class Player : Character
 	public override void _Ready()
 	{
 		base._Ready();
-		//获取槽位
 		enemySlots = new List<EnemySlot>();
-		var enemySlotsTemp = GetNode<Node2D>("EnemySlots");
-		foreach (EnemySlot a in enemySlotsTemp.GetChildren())
+		//获取槽位
+		var Slots = GetNode<Node2D>("EnemySlots");
+		GD.Print(Slots);
+		foreach (EnemySlot s in Slots.GetChildren())
 		{
-			enemySlots.Add(a);
-			GD.Print("join~");
+			GD.Print("xx");
+			enemySlots.Add(s);
 		}
 	}
 
@@ -47,25 +48,19 @@ public partial class Player : Character
 	//返回最近的slot
 	public EnemySlot ReserveSlot(BasicEnemy basciEnemy)
 	{
-
-		//是否有可用槽位
-		List<EnemySlot> availableSlots =
-		enemySlots.FindAll(slot => slot.SlotIsFree());
-		//没有返回空
-		if(availableSlots.Count <= 0)
+		var avaliableSlots = enemySlots.FindAll(e => e.SlotIsFree());
+		if (avaliableSlots.Count <= 0)
 		{
 			return null;
 		}
-		//选出最短的槽位
-		availableSlots.Sort((a, b) =>
+		avaliableSlots.Sort((a, b) =>
 		{
 			float distA = (basciEnemy.GlobalPosition - a.GlobalPosition).Length();
 			float distB = (basciEnemy.GlobalPosition - b.GlobalPosition).Length();
 			return distA.CompareTo(distB);
 		});
-		//最近的位置设置敌人
-		availableSlots[0].setEnemy(basciEnemy);
-		return availableSlots[0];
+		avaliableSlots[0].setSlot(basciEnemy);
+		return avaliableSlots[0];
 	}
 
 	public void FreeSlot(BasicEnemy enemy)
