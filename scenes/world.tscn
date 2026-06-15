@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://wn0vryqy40bl" path="res://scenes/characters/player.tscn" id="2_4wyf3"]
 [ext_resource type="PackedScene" uid="uid://buknjq7fojvjm" path="res://scenes/item/barrel.tscn" id="4_k0juu"]
 [ext_resource type="PackedScene" uid="uid://urnuf5mv7ih5" path="res://scenes/characters/basicEnemy.tscn" id="5_71j4m"]
+[ext_resource type="PackedScene" uid="uid://ded4hcv5tm61t" path="res://scenes/item/knife.tscn" id="6_qfnet"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4wyf3"]
 size = Vector2(5.75, 53)
@@ -19,40 +20,51 @@ camera = NodePath("camera")
 [node name="camera" type="Camera2D" parent="." unique_id=1900903178]
 position = Vector2(50, 32)
 
-[node name="leftwall" type="StaticBody2D" parent="camera" unique_id=1920403131]
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="camera" unique_id=428562704]
 position = Vector2(-42, -20)
+remote_path = NodePath("../../leftwall")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="camera/leftwall" unique_id=707817656]
-position = Vector2(-10.75, 25.5)
-shape = SubResource("RectangleShape2D_4wyf3")
-
-[node name="rightwall" type="StaticBody2D" parent="camera" unique_id=109740428]
+[node name="RemoteTransform2D2" type="RemoteTransform2D" parent="camera" unique_id=560011196]
 position = Vector2(64, -20)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="camera/rightwall" unique_id=1460397088]
-position = Vector2(-11.125, 25.5)
-shape = SubResource("RectangleShape2D_4wyf3")
+remote_path = NodePath("../../rightwall")
 
 [node name="Node2D" type="Node2D" parent="." unique_id=141387274]
 y_sort_enabled = true
 
 [node name="Player" parent="Node2D" unique_id=1715215883 instance=ExtResource("2_4wyf3")]
 position = Vector2(50, 44)
+flyPwoer = 100.0
+attackPowerDamage = 0
 
 [node name="Barrel" parent="Node2D" unique_id=1603968216 instance=ExtResource("4_k0juu")]
 position = Vector2(90, 47)
 
 [node name="Character" parent="Node2D" unique_id=194633409 instance=ExtResource("5_71j4m")]
 position = Vector2(64, 73)
+bettwenDurationAttackRangeTime = 4000
+canRespawnKnife = true
+flyPwoer = 100.0
+attackPowerDamage = 0
+Knockback = 50.0
+knfieRespownTime = 2000
 
-[node name="Character2" parent="Node2D" unique_id=2052158546 instance=ExtResource("5_71j4m")]
-position = Vector2(10, 62)
+[node name="leftwall" type="AnimatableBody2D" parent="." unique_id=995481682]
+position = Vector2(8, 12)
+collision_layer = 128
+collision_mask = 0
 
-[node name="Character3" parent="Node2D" unique_id=1322339061 instance=ExtResource("5_71j4m")]
-position = Vector2(32, 76)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="leftwall" unique_id=707817656]
+position = Vector2(-9, 25.5)
+shape = SubResource("RectangleShape2D_4wyf3")
 
-[node name="Character4" parent="Node2D" unique_id=1613316556 instance=ExtResource("5_71j4m")]
-position = Vector2(79, 50)
+[node name="rightwall" type="AnimatableBody2D" parent="." unique_id=1627128942]
+position = Vector2(114, 12)
+collision_layer = 128
+collision_mask = 0
 
-[node name="Character5" parent="Node2D" unique_id=1921147044 instance=ExtResource("5_71j4m")]
-position = Vector2(20, 40)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="rightwall" unique_id=1460397088]
+position = Vector2(-12, 25.5)
+shape = SubResource("RectangleShape2D_4wyf3")
+
+[node name="Collectible" parent="." unique_id=1702693805 instance=ExtResource("6_qfnet")]
+position = Vector2(23, 63)

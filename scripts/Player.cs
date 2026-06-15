@@ -11,7 +11,10 @@ public partial class Player : Character
 
 	public override void _Ready()
 	{
+
 		base._Ready();
+		attackAnimations = ["punch", "powerAttack", "kick", "roundKick"];
+
 		enemySlots = new List<EnemySlot>();
 		//获取槽位
 		var Slots = GetNode<Node2D>("EnemySlots");
@@ -30,7 +33,22 @@ public partial class Player : Character
 		Velocity = direction * speed;
 		if (CanPunch() && Input.IsActionJustPressed("attack"))
 		{
-			currentState = State.punch;
+			currentState = State.Attack;
+			if (hasKnife)
+			{
+				currentState = State.throwKnife;
+			}
+			else if (canCombo)
+			{
+				attackIndex++;
+				canCombo = false;
+			}
+			else
+			{
+				attackIndex = 0;
+			}
+
+			attackIndex = attackIndex % attackAnimations.Count();
 		}
 
 		if (CanJump() && Input.IsActionJustPressed("jump"))
@@ -70,6 +88,18 @@ public partial class Player : Character
 		if (target_slots.Count() == 1)
 		{
 			target_slots[0].FreeSlot();
+		}
+	}
+
+	public override void setHeading()
+	{
+		if (Velocity.X > 0)
+		{
+			heading = Vector2.Right;
+		}
+		else if (Velocity.X < 0)
+		{
+			heading = Vector2.Left;
 		}
 	}
 }

@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://8sw41tbjmjyy" path="res://scenes/characters/character.tscn" id="1_bsqqu"]
 [ext_resource type="Texture2D" uid="uid://dcldheiy6r7j2" path="res://assets/art/characters/enemy_punk.png" id="2_31of2"]
 [ext_resource type="Script" uid="uid://blrdllvg6o0ri" path="res://scripts/BasicEnemy.cs" id="2_tt8k1"]
+[ext_resource type="Texture2D" uid="uid://djn8a2gf10jxj" path="res://assets/art/characters/enemy_knife.png" id="4_j2ndh"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tt8k1"]
 radius = 2.0
@@ -22,6 +23,42 @@ tracks/0/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ChainDamageEmitter:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("DamageEmitter:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("KnifeSprite:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [50]
+}
 
 [sub_resource type="Animation" id="Animation_j28ol"]
 resource_name = "fall"
@@ -40,6 +77,58 @@ tracks/0/keys = {
 "update": 1,
 "values": [51]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("KnifeSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [51]
+}
+
+[sub_resource type="Animation" id="Animation_8hajn"]
+resource_name = "fly"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [50]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ChainDamageEmitter:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("KnifeSprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [50]
+}
 
 [sub_resource type="Animation" id="Animation_lyoji"]
 resource_name = "gounded"
@@ -57,11 +146,23 @@ tracks/0/keys = {
 "update": 1,
 "values": [52]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("KnifeSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [52]
+}
 
 [sub_resource type="Animation" id="Animation_rb6qd"]
 resource_name = "hurt"
-length = 0.3
-step = 0.1
+length = 0.15
+step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -69,7 +170,7 @@ tracks/0/path = NodePath("CharacterSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
+"times": PackedFloat32Array(0, 0.05, 0.1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [40, 41, 42]
@@ -81,12 +182,24 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.3),
+"times": PackedFloat32Array(0.15),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
 "method": &"completedIdleAction"
 }]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("KnifeSprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [40, 41, 42]
 }
 
 [sub_resource type="Animation" id="Animation_tt8k1"]
@@ -105,6 +218,226 @@ tracks/0/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DamageEmitter:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("KnifeSprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_uq32c"]
+resource_name = "land"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [70]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"completedLandAction"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("KnifeSprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [70]
+}
+
+[sub_resource type="Animation" id="Animation_cwf1l"]
+resource_name = "punch"
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [21, 22]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DamageEmitter:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"completedIdleAction"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("KnifeSprite:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [21, 22]
+}
+
+[sub_resource type="Animation" id="Animation_mokqn"]
+resource_name = "punch_ait "
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [31, 32]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DamageEmitter:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"completedIdleAction"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("KnifeSprite:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [31, 32]
+}
+
+[sub_resource type="Animation" id="Animation_4ca4x"]
+resource_name = "throw"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [31]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("KnifeSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [31]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"CompletedThrowAcition"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_j2ndh"]
 resource_name = "walk"
@@ -122,30 +455,55 @@ tracks/0/keys = {
 "update": 1,
 "values": [10, 11, 12, 13, 14, 15, 16, 17]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("KnifeSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [10, 11, 12, 13, 14, 15, 16, 17]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rb6qd"]
 _data = {
 &"RESET": SubResource("Animation_31of2"),
 &"fall": SubResource("Animation_j28ol"),
+&"fly": SubResource("Animation_8hajn"),
 &"grounded": SubResource("Animation_lyoji"),
 &"hurt": SubResource("Animation_rb6qd"),
 &"idle": SubResource("Animation_tt8k1"),
+&"land": SubResource("Animation_uq32c"),
+&"punch": SubResource("Animation_cwf1l"),
+&"punch_ait": SubResource("Animation_mokqn"),
+&"throw": SubResource("Animation_4ca4x"),
 &"walk": SubResource("Animation_j2ndh")
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tt8k1"]
-size = Vector2(6, 4)
+size = Vector2(5, 4)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j2ndh"]
-size = Vector2(9, 8)
+size = Vector2(7.5, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rb6qd"]
+size = Vector2(6, 6)
 
 [node name="Character" unique_id=1715215883 instance=ExtResource("1_bsqqu")]
 collision_layer = 32
 script = ExtResource("2_tt8k1")
+bettwenDurationAttackMeleeTime = 2000
+prepDurationAttackMeleeTime = 500
+bettwenDurationAttackRangeTime = 2000
+prepDurationAttackRangeTime = 500
 health = 20
 damage = 2
 speed = 25.0
 knockDown = 30.0
+durationGrounded = 1000.0
 
 [node name="CharacterSprite" parent="." index="1" unique_id=1849311222]
 texture = ExtResource("2_31of2")
@@ -163,17 +521,34 @@ libraries/ = SubResource("AnimationLibrary_rb6qd")
 
 [node name="DamageEmitter" parent="." index="4" unique_id=1541520471]
 position = Vector2(0, -11)
+collision_mask = 16
 
 [node name="CollisionShape2D" parent="DamageEmitter" index="0" unique_id=712822009]
-position = Vector2(7, 0)
+position = Vector2(7.5, -1)
 shape = SubResource("RectangleShape2D_tt8k1")
 
-[node name="damage_receiver" parent="." index="5" unique_id=1402504911]
+[node name="DamageReceiver" parent="." index="5" unique_id=1402504911]
 collision_layer = 32
 
-[node name="CollisionShape2D" parent="damage_receiver" index="0" unique_id=2147298208]
-position = Vector2(0.5, -19)
+[node name="CollisionShape2D" parent="DamageReceiver" index="0" unique_id=2147298208]
+position = Vector2(0.25, -18)
 shape = SubResource("RectangleShape2D_j2ndh")
 
+[node name="ChainDamageEmitter" parent="." index="6" unique_id=253260739]
+collision_mask = 160
+
+[node name="CollisionShape2D2" parent="ChainDamageEmitter" index="1" unique_id=1647093855]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_rb6qd")
+debug_color = Color(0.9099713, 0.2782857, 0.2846328, 0.41960785)
+
+[node name="KnifeSprite" parent="." index="7" unique_id=595298464]
+texture = ExtResource("4_j2ndh")
+centered = false
+offset = Vector2(-24, -48)
+hframes = 10
+vframes = 10
+frame = 50
+
 [editable path="DamageEmitter"]
-[editable path="damage_receiver"]
+[editable path="DamageReceiver"]

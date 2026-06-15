@@ -11,7 +11,11 @@
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_rkhd4")
+damage = 4
 speed = 5.0
+flyPwoer = 111.0
+attackPowerDamage = 6
+Knockback = 10.0
 
 [node name="ShadowSprite" type="Sprite2D" parent="." unique_id=701133816]
 texture = ExtResource("2_lrhn5")
@@ -27,7 +31,17 @@ libraries/ = SubResource("AnimationLibrary_e22cc")
 
 [node name="DamageEmitter" parent="." unique_id=1541520471 instance=ExtResource("3_e22cc")]
 
-[node name="damage_receiver" parent="." unique_id=1402504911 instance=ExtResource("4_2qjml")]
+[node name="DamageReceiver" parent="." unique_id=1402504911 instance=ExtResource("4_2qjml")]
+
+[node name="ChainDamageEmitter" parent="." unique_id=253260739 instance=ExtResource("3_e22cc")]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="ChainDamageEmitter" unique_id=1647093855]
+
+[node name="KnifeSprite" type="Sprite2D" parent="." unique_id=595298464]
+
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=1135694175]
+target_position = Vector2(100, 0)
+collision_mask = 2
 
 [editable path="DamageEmitter"]
-[editable path="damage_receiver"]
+[editable path="DamageReceiver"]

@@ -2,37 +2,14 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 public partial class Character : CharacterBody2D
 {
-	[Export]
-	public int health;
-	public int currentHealth;
-	[Export]
-	public int damage;
-	[Export]
-	public float speed;
-	[Export]
-	public float jumpPwoer;
-	public float height = 0;
-	public float heightSpeed;
-
-	//击退值
-	[Export]
-	public float Knockback = 50f;
-	[Export]
-	private float knockDown;
-
-	public enum State
-	{
-		idle, walk, punch, takeOff, jump, land, jumpKick, hurt, fall, grounded
-	}
-
 	protected Dictionary<State, string> stateAnima = new()
 	{
 		{State.idle,"idle"},
 		{State.walk,"walk"},
-		{State.punch,"punch"},
 		{State.takeOff,"takeOff"},
 		{State.jump,"jump"},
 		{State.land,"land"},
@@ -40,7 +17,56 @@ public partial class Character : CharacterBody2D
 		{State.hurt,"hurt"},
 		{State.fall,"fall"},
 		{State.grounded,"grounded"},
+		{State.deadth,"grounded"},
+		{State.fly,"fly"},
+		{State.PrepAttack,"idle"},
+		{State.throwKnife,"throw"},
 	};
+	public enum State
+	{
+		idle, walk, Attack, takeOff, jump, land, jumpKick, hurt, fall, grounded, deadth, fly,
+		PrepAttack, throwKnife
+	}
+	[Export]
+	public int health;
+	public int currentHealth;
+	public int currentDamage;
+
+	[Export]
+	public bool hasKnife;
+	[Export]
+	public bool canRespawnKnife;
+	//朝向
+	public Vector2 heading = Vector2.Right;
+	[Export]
+	public int damage;
+	[Export]
+	public float speed;
+	[Export]
+	public float jumpPwoer;
+	[Export]
+	public float flyPwoer;
+	public float height = 0;
+	public float heightSpeed;
+
+
+	[Export]
+	public int attackPowerDamage;
+	//击退值
+	[Export]
+	public float Knockback = 50f;
+	[Export]
+	private float knockDown;
+	[Export]
+	private float durationGrounded;
+	[Export]
+	private bool canRespawn;
+	public bool canCombo;
+	private ulong timeSinceGrounded = Time.GetTicksMsec();
+
+
+	public string[] attackAnimations;
+	public int attackIndex = 0;
 
 	protected State currentState = State.idle;
 
@@ -48,65 +74,121 @@ public partial class Character : CharacterBody2D
 
 	//伤害发射器
 	protected Area2D damageEmitter;
+	private Area2D chainDamageEmitter;
+
 	// 伤害接受器
 	protected DamageReceiver damageReceiver;
 
 
 	//玩家精灵
 	protected Sprite2D playerSprite2D;
+	protected Sprite2D knifeSprite2D;
+	protected RayCast2D rayCast;
 	//玩家动画
 	protected AnimationPlayer animationPlayer;
+	protected CollisionShape2D collisionShape;
 	protected const int GRAVITY = 600;
+
+	[Export]
+	public int knfieRespownTime;
+
+	public ulong lastThrowKnifeTime;
+
 
 	public override void _Ready()
 	{
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		playerSprite2D = GetNode<Sprite2D>("CharacterSprite");
-		GD.Print(animationPlayer);
+		collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
 		damageEmitter = GetNode<Area2D>("DamageEmitter");
-		damageReceiver = GetNode<DamageReceiver>("damage_receiver");
+		chainDamageEmitter = GetNode<Area2D>("ChainDamageEmitter");
+		damageReceiver = GetNode<DamageReceiver>("DamageReceiver");
+		knifeSprite2D = GetNode<Sprite2D>("KnifeSprite");
+		rayCast = GetNode<RayCast2D>("RayCast2D");
+		
 		//碰到后调用OnEmitCompleted
 		damageEmitter.AreaEntered += OnEmitCompleted;
 		damageReceiver.DamageCompleted += OnReceiverCompleted;
+		chainDamageEmitter.BodyEntered += OnWallHit;
+		chainDamageEmitter.AreaEntered += ChainReaction;
+		lastThrowKnifeTime = Time.GetTicksMsec();
+
+
 		//跳跃力度
 		jumpPwoer = 150;
 		currentHealth = health;
+
 	}
 
-	public override void _PhysicsProcess(double delta)
+
+
+    public override void _PhysicsProcess(double delta)
 	{
 		HandleInput();
 		HandleMove(delta);
+		HandleGrounded();
+		HandleDeadth(delta);
+		HandleKnifeRespawns();
 		HandleAnimationChange();
 		FlipSprites();
+		HandlePrepAttack();
+		knifeSprite2D.Visible = hasKnife;
+		collisionShape.Disabled = currentState == State.grounded ||
+		currentState == State.fall || currentState == State.fly;
 		MoveAndSlide();
+		setHeading();
+	}
+
+	public virtual void HandleKnifeRespawns()
+	{
+		if (!hasKnife)
+		{
+			//每隔2秒钟重新生成刀具
+			if (canRespawnKnife && Time.GetTicksMsec() - lastThrowKnifeTime > (ulong)knfieRespownTime)
+			{
+				hasKnife = true;
+			}
+		}
+
+	}
+
+	public virtual void HandlePrepAttack()
+	{
+
+	}
+
+	private void HandleDeadth(double delta)
+	{
+		if (currentHealth <= 0 && !canRespawn)
+		{
+			Velocity = Vector2.Zero;
+			currentState = State.deadth;
+			Modulate = new Color(Modulate, Modulate.A - (float)delta);
+			if (Modulate.A <= 0)
+			{
+				QueueFree();
+
+			}
+		}
+	}
+
+
+	private void HandleGrounded()
+	{
+		if (currentState == State.grounded && (Time.GetTicksMsec() - timeSinceGrounded > durationGrounded))
+		{
+			currentState = State.land;
+		}
 	}
 
 	public virtual void HandleInput()
 	{
-		// var direction = Input.GetVector("left", "right", "up", "down");
-		// Velocity = direction * speed;
 
-		// if (Canpunch() && Input.IsActionJustPressed("attack"))
-		// {
-		// 	currentState = State.punch;
-		// }
-
-		// if (CanJump() && Input.IsActionJustPressed("jump"))
-		// {
-		// 		heightSpeed = jumpPwoer;
-		// 		currentState = State.takeOff;
-		// }
-		// if (CanJumpKick() && Input.IsActionJustPressed("attack"))
-		// {
-		// 	currentState = State.jumpKick;
-
-		// }
 	}
 
 	public void HandleMove(double delta)
 	{
-		if (currentState == State.punch)
+		if (currentState == State.Attack)
 		{
 			Velocity = Vector2.Zero;
 			GD.Print("1");
@@ -128,46 +210,73 @@ public partial class Character : CharacterBody2D
 			height += heightSpeed * (float)delta;
 			if (height < 0)
 			{
-				
+
 				height = 0;
 				if (currentState == State.fall)
 				{
 					currentState = State.grounded;
+					timeSinceGrounded = Time.GetTicksMsec();
 				}
 				else
 					currentState = State.land;
+				Velocity = Vector2.Zero;
 			}
 			else
 			{
 				heightSpeed -= GRAVITY * (float)delta;
 			}
 			playerSprite2D.Position = Vector2.Up * height;
+			knifeSprite2D.Position = Vector2.Up * height;
+
+
 		}
 	}
 
 
 	public void HandleAnimationChange()
 	{
-		animationPlayer.Play(stateAnima[currentState]);
-	}
+		if (currentState == State.Attack)
+		{
+			animationPlayer.Play(attackAnimations[attackIndex]);
 
+		}
+		else
+		{
+			animationPlayer.Play(stateAnima[currentState]);
+
+		}
+	}
+	public virtual void setHeading()
+	{
+
+	}
 	public void FlipSprites()
 	{
 
-		if (Input.GetAxis("left", "right") > 0)
+		if (heading == Vector2.Right)
 		{
-			playerSprite2D
-	.FlipH = false;
+			playerSprite2D.FlipH = false;
+			knifeSprite2D.FlipH = false;
 			damageEmitter.Scale = new Vector2(1, damageEmitter.Scale.Y);
+			rayCast.Scale = new Vector2(1, damageEmitter.Scale.Y);
 		}
-		else if (Input.GetAxis("left", "right") < 0)
+		else if (heading == Vector2.Left)
 		{
 			damageEmitter.Scale = new Vector2(-1, damageEmitter.Scale.Y);
-			playerSprite2D
-	.FlipH = true;
+			rayCast.Scale = new Vector2(-1, damageEmitter.Scale.Y);
+			playerSprite2D.FlipH = true;
+			knifeSprite2D.FlipH = true;
+
 		}
 	}
-	public bool CanPunch()
+	public bool CanGetHurt()
+	{
+		return currentState == State.idle
+		|| currentState == State.walk || currentState == State.takeOff
+		|| currentState == State.land || currentState == State.jump;
+	}
+
+	public virtual bool CanPunch()
 	{
 		return currentState == State.idle || currentState == State.walk;
 	}
@@ -190,6 +299,12 @@ public partial class Character : CharacterBody2D
 	{
 		currentState = State.idle;
 	}
+
+	public void CompletedThrowAcition()
+	{
+		currentState = State.idle;
+		hasKnife = false;
+	}
 	public void completedTakeOffAction()
 	{
 		currentState = State.jump;
@@ -207,31 +322,77 @@ public partial class Character : CharacterBody2D
 	//伤害发射器
 	public void OnEmitCompleted(Node2D temp)
 	{
+
+		
 		var hitType = DamageReceiver.HitType.NORMAL;
 		var direction = Position.X - temp.GlobalPosition.X < 0 ? Vector2.Right : Vector2.Left;
+		canCombo = true;
+		currentDamage = damage;
 		if (currentState == State.jumpKick)
 		{
 			hitType = DamageReceiver.HitType.KNOCKDOWN;
 		}
-		temp.EmitSignal("DamageCompleted", damage, direction, (int)hitType);
+		if (attackIndex == attackAnimations.Count() - 1)
+		{
+			hitType = DamageReceiver.HitType.POWER;
+			currentDamage = attackPowerDamage;
+
+		}
+		temp.EmitSignal("DamageCompleted", currentDamage, direction, (int)hitType);
 	}
 
 	public virtual void OnReceiverCompleted(int damageTemp, Vector2 direction, int hitTypeInt)
 	{
-		currentHealth -= damageTemp;
-		if (currentHealth <= 0 || hitTypeInt == 1)
+		if (CanGetHurt())
+		{
+
+			if (hasKnife)
+			{
+				hasKnife = false;
+				lastThrowKnifeTime = Time.GetTicksMsec();
+			}
+
+			currentHealth -= damageTemp;
+			GD.Print($"currentHealth{currentHealth}");
+			if (currentHealth <= 0 || hitTypeInt == 1)
+			{
+				currentState = State.fall;
+				heightSpeed = knockDown;
+				Velocity = Knockback * direction;
+			}
+			else if (hitTypeInt == (int)DamageReceiver.HitType.POWER)
+			{
+				currentState = State.fly;
+				Velocity = flyPwoer * direction;
+
+			}
+			else
+			{
+				currentState = State.hurt;
+				Velocity = Knockback * direction;
+			}
+		}
+	}
+
+	private void OnWallHit(Node2D wall)
+	{
+
+		if (wall is AnimatableBody2D)
 		{
 			currentState = State.fall;
 			heightSpeed = knockDown;
+			Velocity = -Velocity / 2;
 		}
-		else
-		{
-			currentState = State.hurt;
-		}
-		Velocity = Knockback * direction;
-		if (currentHealth <= 0)
-		{
-			QueueFree();
-		}
+
 	}
+	private void ChainReaction(Area2D receiver)
+	{
+		// 排除自身的 DamageReceiver
+		if (receiver.GetParent() == this) return;
+
+		var direction = Position.X - receiver.GlobalPosition.X < 0 ? Vector2.Right : Vector2.Left;
+		receiver.EmitSignal("DamageCompleted", damage, direction, (int)DamageReceiver.HitType.KNOCKDOWN);
+	}
+
+
 }
