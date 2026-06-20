@@ -19,7 +19,7 @@ public partial class Acters : Node2D
 
 
 	public void OnCollectibleSpawn(int intType, int intState,
-	Vector2 collectiblePosition, Vector2 direction,float height)
+	Vector2 collectiblePosition, Vector2 direction, float height)
 	{
 		var type = (Collectible.Type)intType;
 		var state = (Collectible.State)intState;
@@ -31,5 +31,9 @@ public partial class Acters : Node2D
 		collec.direction = direction;
 		collec.height = height;
 		AddChild(collec);
+	}
+
+	public void OnShotSpawn()
+	{
 	}
 }
