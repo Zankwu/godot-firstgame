@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bsvw5vhxclaqv"]
+
+[ext_resource type="Script" uid="uid://if6gp7xwlyxo" path="res://scripts/Shot.cs" id="1_0jult"]
+
+[node name="Line2D" type="Line2D" unique_id=531351644]
+default_color = Color(0.5461939, 0.93204063, 0.9231228, 1)
+script = ExtResource("1_0jult")

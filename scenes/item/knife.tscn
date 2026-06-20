@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://ded4hcv5tm61t"]
+[gd_scene format=3 uid="uid://clqck6kawlwhi"]
 
 [ext_resource type="PackedScene" uid="uid://bc2i3ah7x2vsr" path="res://scenes/item/collectible.tscn" id="1_bc1eg"]
 [ext_resource type="Texture2D" uid="uid://dir1452cjvhn7" path="res://assets/art/props/knife.png" id="2_jlckq"]
@@ -32,6 +32,42 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector2(0, -8)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:monitorable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:monitoring")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("DamageEmitter:monitoring")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_ngyai"]
 resource_name = "fall"
@@ -50,6 +86,42 @@ tracks/0/keys = {
 "update": 1,
 "values": [0.0, 1.5707964, 3.1415927, 4.712389]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/path = NodePath(".:monitorable")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DamageEmitter:monitoring")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_loe7u"]
 resource_name = "fly"
@@ -59,14 +131,50 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CollectibleSprite2D:position")
+tracks/0/path = NodePath(".:monitorable")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("DamageEmitter:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CollectibleSprite2D:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_1wsiv"]
@@ -98,6 +206,42 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector2(0, -8)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:monitorable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:monitoring")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("DamageEmitter:monitoring")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1wsiv"]
 _data = {
@@ -107,7 +251,16 @@ _data = {
 &"grounded": SubResource("Animation_1wsiv")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ngyai"]
+size = Vector2(3, 3)
+
 [node name="Collectible" unique_id=1702693805 instance=ExtResource("1_bc1eg")]
+collision_layer = 256
+collision_mask = 128
+monitoring = false
+monitorable = false
+speed = 100.0
+damage = 4.0
 knockDown = 120.0
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=2140327942]
@@ -123,3 +276,10 @@ position = Vector2(0, -8)
 texture = ExtResource("2_jlckq")
 centered = false
 offset = Vector2(-8, -8)
+
+[node name="DamageEmitter" parent="." index="4" unique_id=1541520471]
+collision_mask = 48
+
+[node name="CollisionShape2D2" parent="DamageEmitter" index="1" unique_id=1963447235]
+shape = SubResource("RectangleShape2D_ngyai")
+debug_color = Color(0.86839217, 0.34790015, 0.1627897, 0.41960785)

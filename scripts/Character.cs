@@ -21,11 +21,14 @@ public partial class Character : CharacterBody2D
 		{State.fly,"fly"},
 		{State.PrepAttack,"idle"},
 		{State.throwKnife,"throw"},
+		{State.pickup,"pickup"},
+		{State.shot,"shot"},
 	};
 	public enum State
 	{
 		idle, walk, Attack, takeOff, jump, land, jumpKick, hurt, fall, grounded, deadth, fly,
-		PrepAttack, throwKnife
+		PrepAttack, throwKnife, pickup, shot
+
 	}
 	[Export]
 	public int health;
@@ -34,6 +37,9 @@ public partial class Character : CharacterBody2D
 
 	[Export]
 	public bool hasKnife;
+
+	[Export]
+	public bool hasGun;
 	[Export]
 	public bool canRespawnKnife;
 	//朝向
@@ -83,10 +89,16 @@ public partial class Character : CharacterBody2D
 	//玩家精灵
 	protected Sprite2D playerSprite2D;
 	protected Sprite2D knifeSprite2D;
+	protected Sprite2D gunSprite;
 	protected RayCast2D rayCast;
 	//玩家动画
 	protected AnimationPlayer animationPlayer;
 	protected CollisionShape2D collisionShape;
+
+	protected Node2D weaponPosition;
+
+	protected Area2D sensor;
+
 	protected const int GRAVITY = 600;
 
 	[Export]
@@ -104,8 +116,11 @@ public partial class Character : CharacterBody2D
 		chainDamageEmitter = GetNode<Area2D>("ChainDamageEmitter");
 		damageReceiver = GetNode<DamageReceiver>("DamageReceiver");
 		knifeSprite2D = GetNode<Sprite2D>("KnifeSprite");
+		gunSprite = GetNode<Sprite2D>("GunSprite");
 		rayCast = GetNode<RayCast2D>("RayCast2D");
-		
+		sensor = GetNode<Area2D>("CollectibleSensor");
+		weaponPosition = GetNode<Node2D>("KnifeSprite/WeaponPosition");
+
 		//碰到后调用OnEmitCompleted
 		damageEmitter.AreaEntered += OnEmitCompleted;
 		damageReceiver.DamageCompleted += OnReceiverCompleted;
@@ -122,7 +137,7 @@ public partial class Character : CharacterBody2D
 
 
 
-    public override void _PhysicsProcess(double delta)
+	public override void _PhysicsProcess(double delta)
 	{
 		HandleInput();
 		HandleMove(delta);
@@ -132,14 +147,25 @@ public partial class Character : CharacterBody2D
 		HandleAnimationChange();
 		FlipSprites();
 		HandlePrepAttack();
+		damageEmitter.Monitoring = isAttacking();
+		damageReceiver.Monitorable = CanGetHurt();
 		knifeSprite2D.Visible = hasKnife;
+		gunSprite.Visible = hasGun;
 		collisionShape.Disabled = currentState == State.grounded ||
 		currentState == State.fall || currentState == State.fly;
+		playerSprite2D.Position = Vector2.Up * height;
+		knifeSprite2D.Position = Vector2.Up * height;
+		gunSprite.Position = Vector2.Up * height;
 		MoveAndSlide();
 		setHeading();
 	}
 
-	public virtual void HandleKnifeRespawns()
+    private bool isAttacking()
+    {
+        return currentState == State.Attack || currentState == State.jumpKick;
+    }
+
+    public virtual void HandleKnifeRespawns()
 	{
 		if (!hasKnife)
 		{
@@ -159,7 +185,7 @@ public partial class Character : CharacterBody2D
 
 	private void HandleDeadth(double delta)
 	{
-		if (currentHealth <= 0 && !canRespawn)
+		if (currentHealth <= 0 || (!canRespawn && currentHealth <= 0))
 		{
 			Velocity = Vector2.Zero;
 			currentState = State.deadth;
@@ -191,7 +217,6 @@ public partial class Character : CharacterBody2D
 		if (currentState == State.Attack)
 		{
 			Velocity = Vector2.Zero;
-			GD.Print("1");
 			return;
 		}
 		if (CanMove())
@@ -225,8 +250,7 @@ public partial class Character : CharacterBody2D
 			{
 				heightSpeed -= GRAVITY * (float)delta;
 			}
-			playerSprite2D.Position = Vector2.Up * height;
-			knifeSprite2D.Position = Vector2.Up * height;
+
 
 
 		}
@@ -256,24 +280,55 @@ public partial class Character : CharacterBody2D
 		if (heading == Vector2.Right)
 		{
 			playerSprite2D.FlipH = false;
-			knifeSprite2D.FlipH = false;
+			knifeSprite2D.Scale = new Vector2(1, knifeSprite2D.Scale.Y);
+			gunSprite.Scale = new Vector2(1, gunSprite.Scale.Y);
+
 			damageEmitter.Scale = new Vector2(1, damageEmitter.Scale.Y);
-			rayCast.Scale = new Vector2(1, damageEmitter.Scale.Y);
+			rayCast.Scale = new Vector2(1, rayCast.Scale.Y);
 		}
-		else if (heading == Vector2.Left)
+		else
 		{
-			damageEmitter.Scale = new Vector2(-1, damageEmitter.Scale.Y);
-			rayCast.Scale = new Vector2(-1, damageEmitter.Scale.Y);
+
 			playerSprite2D.FlipH = true;
-			knifeSprite2D.FlipH = true;
+			damageEmitter.Scale = new Vector2(-1, damageEmitter.Scale.Y);
+			gunSprite.Scale = new Vector2(-1, gunSprite.Scale.Y);
+
+			rayCast.Scale = new Vector2(-1, rayCast.Scale.Y);
+			knifeSprite2D.Scale = new Vector2(-1, knifeSprite2D.Scale.Y);
 
 		}
 	}
+	public virtual bool CanPickUp()
+	{
+		var areas = sensor.GetOverlappingAreas();
+		if (areas.Count != 0)
+		{
+			Collectible collectType = areas[0] as Collectible;
+			if (!hasKnife && collectType.currentType == Collectible.Type.knife)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public virtual void PickedUp()
+	{
+		if (CanPickUp())
+		{
+			var areas = sensor.GetOverlappingAreas();
+			hasKnife = true;
+			areas[0].QueueFree();
+			currentState = State.idle;
+		}
+	}
+
+
 	public bool CanGetHurt()
 	{
 		return currentState == State.idle
 		|| currentState == State.walk || currentState == State.takeOff
-		|| currentState == State.land || currentState == State.jump;
+		|| currentState == State.land || currentState == State.PrepAttack;
 	}
 
 	public virtual bool CanPunch()
@@ -304,6 +359,15 @@ public partial class Character : CharacterBody2D
 	{
 		currentState = State.idle;
 		hasKnife = false;
+		var knife_globalpositon = new Vector2(weaponPosition.GlobalPosition.X,GlobalPosition.Y);
+
+		EntityManager.Instance.EmitSignal(EntityManager.SignalName.SpawnCollectibles, 
+		(int)Collectible.Type.knife, 
+		(int)Collectible.State.fly, 
+		knife_globalpositon, 
+		heading, 
+		-weaponPosition.Position.Y);
+
 	}
 	public void completedTakeOffAction()
 	{
@@ -323,7 +387,6 @@ public partial class Character : CharacterBody2D
 	public void OnEmitCompleted(Node2D temp)
 	{
 
-		
 		var hitType = DamageReceiver.HitType.NORMAL;
 		var direction = Position.X - temp.GlobalPosition.X < 0 ? Vector2.Right : Vector2.Left;
 		canCombo = true;
@@ -345,13 +408,13 @@ public partial class Character : CharacterBody2D
 	{
 		if (CanGetHurt())
 		{
-
 			if (hasKnife)
 			{
 				hasKnife = false;
 				lastThrowKnifeTime = Time.GetTicksMsec();
 			}
-
+			canRespawnKnife = false;
+			GD.Print($"message: {canRespawnKnife}");
 			currentHealth -= damageTemp;
 			GD.Print($"currentHealth{currentHealth}");
 			if (currentHealth <= 0 || hitTypeInt == 1)

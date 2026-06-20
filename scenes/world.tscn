@@ -5,14 +5,16 @@
 [ext_resource type="PackedScene" uid="uid://wn0vryqy40bl" path="res://scenes/characters/player.tscn" id="2_4wyf3"]
 [ext_resource type="PackedScene" uid="uid://buknjq7fojvjm" path="res://scenes/item/barrel.tscn" id="4_k0juu"]
 [ext_resource type="PackedScene" uid="uid://urnuf5mv7ih5" path="res://scenes/characters/basicEnemy.tscn" id="5_71j4m"]
+[ext_resource type="PackedScene" uid="uid://uew7uu2aseqc" path="res://scenes/characters/GoonEnemy.tscn" id="6_i7141"]
 [ext_resource type="PackedScene" uid="uid://ded4hcv5tm61t" path="res://scenes/item/knife.tscn" id="6_qfnet"]
+[ext_resource type="Script" uid="uid://bn5tathdvlyk8" path="res://scripts/Acters.cs" id="7_x4q2a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4wyf3"]
 size = Vector2(5.75, 53)
 
 [node name="World" type="Node2D" unique_id=945801548 node_paths=PackedStringArray("player", "camera")]
 script = ExtResource("1_4wyf3")
-player = NodePath("Node2D/Player")
+player = NodePath("acters/Player")
 camera = NodePath("camera")
 
 [node name="Stage" parent="." unique_id=1737446139 instance=ExtResource("1_rwgxs")]
@@ -28,25 +30,27 @@ remote_path = NodePath("../../leftwall")
 position = Vector2(64, -20)
 remote_path = NodePath("../../rightwall")
 
-[node name="Node2D" type="Node2D" parent="." unique_id=141387274]
+[node name="acters" type="Node2D" parent="." unique_id=141387274]
 y_sort_enabled = true
+script = ExtResource("7_x4q2a")
 
-[node name="Player" parent="Node2D" unique_id=1715215883 instance=ExtResource("2_4wyf3")]
-position = Vector2(50, 44)
+[node name="Player" parent="acters" unique_id=1715215883 instance=ExtResource("2_4wyf3")]
+position = Vector2(50, 44.1)
 flyPwoer = 100.0
 attackPowerDamage = 0
 
-[node name="Barrel" parent="Node2D" unique_id=1603968216 instance=ExtResource("4_k0juu")]
+[node name="Barrel" parent="acters" unique_id=1603968216 instance=ExtResource("4_k0juu")]
 position = Vector2(90, 47)
 
-[node name="Character" parent="Node2D" unique_id=194633409 instance=ExtResource("5_71j4m")]
-position = Vector2(64, 73)
-bettwenDurationAttackRangeTime = 4000
-canRespawnKnife = true
-flyPwoer = 100.0
+[node name="PunkEnemy" parent="acters" unique_id=194633409 instance=ExtResource("5_71j4m")]
+position = Vector2(64, 68)
 attackPowerDamage = 0
 Knockback = 50.0
 knfieRespownTime = 2000
+
+[node name="GoonEnemy" parent="acters" unique_id=408042335 instance=ExtResource("6_i7141")]
+position = Vector2(90, 63)
+prepDurationAttackRangeTime = 500
 
 [node name="leftwall" type="AnimatableBody2D" parent="." unique_id=995481682]
 position = Vector2(8, 12)
@@ -67,4 +71,4 @@ position = Vector2(-12, 25.5)
 shape = SubResource("RectangleShape2D_4wyf3")
 
 [node name="Collectible" parent="." unique_id=1702693805 instance=ExtResource("6_qfnet")]
-position = Vector2(23, 63)
+position = Vector2(22, 57)

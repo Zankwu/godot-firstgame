@@ -24,22 +24,40 @@ public partial class Player : Character
 			GD.Print("xx");
 			enemySlots.Add(s);
 		}
+
+
 	}
 
 
 	public override void HandleInput()
 	{
-		var direction = Input.GetVector("left", "right", "up", "down");
-		Velocity = direction * speed;
+		base.HandleInput();
+		if (CanMove())
+		{
+			var direction = Input.GetVector("left", "right", "up", "down");
+
+			Velocity = direction * speed;
+		}
+
 		if (CanPunch() && Input.IsActionJustPressed("attack"))
 		{
 			currentState = State.Attack;
-			if (hasKnife)
+			if (CanPickUp() && !hasKnife)
+			{
+				currentState = State.pickup;
+			}
+			else if (hasKnife)
 			{
 				currentState = State.throwKnife;
 			}
+			else if (hasGun)
+			{
+				currentState = State.shot;
+
+			}
 			else if (canCombo)
 			{
+
 				attackIndex++;
 				canCombo = false;
 			}
@@ -93,13 +111,17 @@ public partial class Player : Character
 
 	public override void setHeading()
 	{
-		if (Velocity.X > 0)
+		if (CanMove())
 		{
-			heading = Vector2.Right;
+			if (Velocity.X > 0)
+			{
+				heading = Vector2.Right;
+			}
+			else if (Velocity.X < 0)
+			{
+				heading = Vector2.Left;
+			}
 		}
-		else if (Velocity.X < 0)
-		{
-			heading = Vector2.Left;
-		}
+
 	}
 }

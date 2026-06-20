@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://c0jg2op1s8sj" path="res://scenes/colliders/damage_emitter.tscn" id="1_s24pf"]
 
 [node name="Collectible" type="Area2D" unique_id=1702693805]
+collision_layer = 384
+collision_mask = 0
 script = ExtResource("1_q8l23")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2140327942]
@@ -19,3 +21,5 @@ offset = Vector2(-3, -1)
 [node name="CollectibleSprite2D" type="Sprite2D" parent="." unique_id=1464240408]
 
 [node name="DamageEmitter" parent="." unique_id=1541520471 instance=ExtResource("1_s24pf")]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="DamageEmitter" unique_id=1963447235]

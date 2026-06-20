@@ -39,9 +39,17 @@ libraries/ = SubResource("AnimationLibrary_e22cc")
 
 [node name="KnifeSprite" type="Sprite2D" parent="." unique_id=595298464]
 
+[node name="WeaponPosition" type="Node2D" parent="KnifeSprite" unique_id=324347049]
+
+[node name="GunSprite" type="Sprite2D" parent="." unique_id=2108383683]
+
 [node name="RayCast2D" type="RayCast2D" parent="." unique_id=1135694175]
 target_position = Vector2(100, 0)
 collision_mask = 2
+
+[node name="CollectibleSensor" type="Area2D" parent="." unique_id=1462156502]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollectibleSensor" unique_id=788679235]
 
 [editable path="DamageEmitter"]
 [editable path="DamageReceiver"]

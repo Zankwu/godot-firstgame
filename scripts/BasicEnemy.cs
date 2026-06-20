@@ -7,7 +7,7 @@ public partial class BasicEnemy : Character
 
 	[Export]
 	public Player player;
-	
+
 
 	//近战攻击间隔
 	[Export]
@@ -50,24 +50,19 @@ public partial class BasicEnemy : Character
 
 	public override void HandleInput()
 	{
+
 		if (player != null && CanMove())
 		{
-			// if (hasKnife)
-			// {
 
-			// }
-			// else
-			// {
-			// 	AttackWithMelee();
-			// }
-
-			if (canRespawnKnife)
+			if (canRespawnKnife || hasKnife || hasGun)
 			{
 				AttackWithRange();
 			}
 			else
 			{
+				GD.Print($"message: {canRespawnKnife}{hasKnife}{hasGun}");
 				AttackWithMelee();
+
 			}
 		}
 	}
@@ -83,8 +78,8 @@ public partial class BasicEnemy : Character
 		float screenRightEdge = camera.GlobalPosition.X + screenWidth / 2;
 
 		// 计算左右目标点（Y 轴对齐玩家）
-		Vector2 leftDestination = new Vector2(screenLeftEdge+10, player.GlobalPosition.Y);
-		Vector2 rightDestination = new Vector2(screenRightEdge-10, player.GlobalPosition.Y);
+		Vector2 leftDestination = new Vector2(screenLeftEdge + 10, player.GlobalPosition.Y);
+		Vector2 rightDestination = new Vector2(screenRightEdge - 10, player.GlobalPosition.Y);
 
 		// 选择最近的目标
 		Vector2 closestDestination;
@@ -106,17 +101,31 @@ public partial class BasicEnemy : Character
 		{
 			Velocity = (closestDestination - GlobalPosition).Normalized() * speed;
 		}
-		if(CanThrow() && hasKnife && rayCast.IsColliding())
+		if (CanRangeAttack() && hasKnife && rayCast.IsColliding())
 		{
 			currentState = State.throwKnife;
 			rangeLastSinceAttackTime = Time.GetTicksMsec();
 			lastThrowKnifeTime = Time.GetTicksMsec();
 		}
+
+		if (CanRangeAttack() && hasGun && rayCast.IsColliding())
+		{
+			currentState = State.shot;
+			rangeLastSinceAttackTime = Time.GetTicksMsec();
+		}
 	}
 
 	public void AttackWithMelee()
 	{
-		if (playerSlot == null)
+		if (CanPickUp())
+		{
+			currentState = State.pickup;
+			if (playerSlot != null)
+			{
+				player.FreeSlot(this);
+			}
+		}
+		else if (playerSlot == null)
 		{
 			playerSlot = player.ReserveSlot(this);
 		}
@@ -151,10 +160,10 @@ public partial class BasicEnemy : Character
 
 			// 一行打乱
 			attackAnimations = attackAnimations.OrderBy(x => Guid.NewGuid()).ToArray();
-			if (hasKnife)
-			{
-				currentState = State.throwKnife;
-			}
+			// if (hasKnife)
+			// {
+			// 	currentState = State.throwKnife;
+			// }
 		}
 	}
 
@@ -174,9 +183,10 @@ public partial class BasicEnemy : Character
 		return base.CanPunch();
 	}
 
-	public bool CanThrow()
+	public bool CanRangeAttack()
 	{
-		if(Time.GetTicksMsec() - rangeLastSinceAttackTime < (ulong)bettwenDurationAttackRangeTime)
+		if (Time.GetTicksMsec() - rangeLastSinceAttackTime - (ulong)bettwenDurationAttackRangeTime
+			< (ulong)prepDurationAttackRangeTime)
 		{
 			return false;
 		}
@@ -197,7 +207,10 @@ public partial class BasicEnemy : Character
 		// {
 		// 	heading = Vector2.Right;
 		// }
-
+		if (player == null || !CanMove())
+		{
+			return;
+		}
 		if (Position.X > player.Position.X)
 		{
 			heading = Vector2.Left;
@@ -214,8 +227,8 @@ public partial class BasicEnemy : Character
 		GD.Print(currentState);
 		if (currentHealth <= 0 || currentState == State.grounded)
 		{
-			GD.Print("grounded~");
-			playerSlot?.FreeSlot();
+
+			player?.FreeSlot(this);
 
 		}
 	}
