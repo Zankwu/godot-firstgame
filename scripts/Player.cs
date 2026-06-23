@@ -21,7 +21,6 @@ public partial class Player : Character
 		GD.Print(Slots);
 		foreach (EnemySlot s in Slots.GetChildren())
 		{
-			GD.Print("xx");
 			enemySlots.Add(s);
 		}
 
@@ -42,7 +41,8 @@ public partial class Player : Character
 		if (CanPunch() && Input.IsActionJustPressed("attack"))
 		{
 			currentState = State.Attack;
-			if (CanPickUp() && !hasKnife)
+			GD.Print($"currentHealth: {currentHealth}");
+			if (CanPickUp())
 			{
 				currentState = State.pickup;
 			}
@@ -52,8 +52,8 @@ public partial class Player : Character
 			}
 			else if (hasGun)
 			{
-				currentState = State.shot;
-
+				
+				Shoot();
 			}
 			else if (canCombo)
 			{
@@ -124,4 +124,11 @@ public partial class Player : Character
 		}
 
 	}
+
+	public override void Shoot()
+	{
+		base.Shoot();
+		ammo_left -= 1;
+	}
+
 }

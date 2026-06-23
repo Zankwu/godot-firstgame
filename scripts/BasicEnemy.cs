@@ -28,7 +28,7 @@ public partial class BasicEnemy : Character
 	public ulong meleeReadySinceAttackTime = Time.GetTicksMsec();
 
 	//远程攻击时间
-	public ulong rangeLastSinceAttackTime = Time.GetTicksMsec();
+	public ulong rangeLastSinceAttackTime = Time.GetTicksMsec(); //上次攻击时间
 	public ulong rangeReadySinceAttackTime = Time.GetTicksMsec();
 
 	public ulong durationTime;
@@ -42,7 +42,7 @@ public partial class BasicEnemy : Character
 	{
 		base._Ready();
 		// 获取兄弟节点 Player
-		player = GetNode<Player>("../Player");
+		player = GetNode<Player>("/root/World/acters/Player");
 		attackAnimations = ["punch", "punch_ait"];
 
 
@@ -60,9 +60,7 @@ public partial class BasicEnemy : Character
 			}
 			else
 			{
-				GD.Print($"message: {canRespawnKnife}{hasKnife}{hasGun}");
 				AttackWithMelee();
-
 			}
 		}
 	}
@@ -110,8 +108,11 @@ public partial class BasicEnemy : Character
 
 		if (CanRangeAttack() && hasGun && rayCast.IsColliding())
 		{
-			currentState = State.shot;
-			rangeLastSinceAttackTime = Time.GetTicksMsec();
+			currentState = State.PrepShot;
+			rangeReadySinceAttackTime = Time.GetTicksMsec();
+			Velocity = Vector2.Zero;
+			HandlePrepShoot();
+			// rangeLastSinceAttackTime = Time.GetTicksMsec();
 		}
 	}
 
@@ -149,7 +150,16 @@ public partial class BasicEnemy : Character
 			}
 		}
 	}
+	public override void HandlePrepShoot()
+	{
+		if (Time.GetTicksMsec() - (ulong)rangeReadySinceAttackTime > (ulong)prepDurationAttackRangeTime  && currentState == State.PrepShot)
+		{
+			Shoot();	 
+			GD.Print($"Time.GetTicksMsec(): {currentState}");
+			rangeLastSinceAttackTime = Time.GetTicksMsec();
+		}
 
+	}
 	public override void HandlePrepAttack()
 	{
 
@@ -170,9 +180,9 @@ public partial class BasicEnemy : Character
 	public override void HandleKnifeRespawns()
 	{
 		base.HandleKnifeRespawns();
-
-
 	}
+
+
 
 	public override bool CanPunch()
 	{
@@ -185,8 +195,8 @@ public partial class BasicEnemy : Character
 
 	public bool CanRangeAttack()
 	{
-		if (Time.GetTicksMsec() - rangeLastSinceAttackTime - (ulong)bettwenDurationAttackRangeTime
-			< (ulong)prepDurationAttackRangeTime)
+		if (Time.GetTicksMsec() - rangeLastSinceAttackTime 
+			< (ulong)bettwenDurationAttackRangeTime)
 		{
 			return false;
 		}

@@ -14,9 +14,9 @@ public partial class EntityManager : Node
 
     [Signal]
     public delegate void SpawnCollectiblesEventHandler(int type, int state,
-   Vector2 collectiblePosition, Vector2 direction,float height);
+   Vector2 collectiblePosition, Vector2 direction,float height,bool auto_destroyed);
 
     [Signal]
-    public delegate void ClearCollectibleEventHandler();
+    public delegate void SpawnShotEventHandler(Vector2 gun_root_position,float distance , float gun_height);
 
 }

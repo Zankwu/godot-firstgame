@@ -7,6 +7,9 @@ public partial class Barrel : StaticBody2D
 
 	private DamageReceiver damageRece;
 
+	[Export]
+	public Collectible.Type item_by_destroy;
+
 	private AnimationPlayer barrelAnimation;
 
 	// Called when the node enters the scene tree for the first time.
@@ -64,16 +67,31 @@ public partial class Barrel : StaticBody2D
 
 	}
 	// TODO 接收到信号后调用
-	public void OnDamageCompleted(int damage, Vector2 direction,int hitTypeInt)
+	public void OnDamageCompleted(int damage, Vector2 direction, int hitTypeInt)
 	{
 		if (currentState == State.idle)
 		{
 			currentState = State.destroyed;
 			heightSpeed = knockBack * 2;
+			if (item_by_destroy != Collectible.Type.nothing)
+			{
+				GD.Print($"Position: {Position}");
+				GD.Print($"GlobalPosition: {GlobalPosition}");
+				EntityManager.Instance.EmitSignal(EntityManager.SignalName.SpawnCollectibles,
+				(int)item_by_destroy,
+				(int)Collectible.State.fall,
+				GlobalPosition,
+				Vector2.Zero,
+				0.0,
+				false
+				);
+			}
+			velocity = direction * knockBack;
+
 		}
 		//判断是从左还是从右打得
 
-		velocity = direction * knockBack;
+
 
 
 	}
@@ -95,7 +113,6 @@ public partial class Barrel : StaticBody2D
 				heightSpeed -= GRAVITY * delta;
 
 			}
-			GD.Print($"heightSpeed:{heightSpeed},{height}");
 			Position += velocity * (float)delta;
 			barrelSprte2D.Position = Vector2.Up * (float)height;
 		}

@@ -23,6 +23,7 @@ public partial class Shot : Line2D
 		AddPoint(new Vector2(0,-height),0);
 		AddPoint(new Vector2(distance,-height),1);
 		duration_shot = Mathf.Abs(shot_distance) * shot_duration_time / GetViewport().GetVisibleRect().Size.X;
+		
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -30,9 +31,9 @@ public partial class Shot : Line2D
 	{
 		var elapsed = Time.GetTicksMsec() - time_start;
 		var progress = elapsed / duration_shot;
-		float new_x = (float)Mathf.Lerp(0.0,shot_distance,progress);
+		var new_x = Mathf.Lerp(0,shot_distance,progress);
 		SetPointPosition(0,new Vector2(new_x,-height));
-		if (progress > 1)
+		if(progress >= 1)
 		{
 			QueueFree();
 		}

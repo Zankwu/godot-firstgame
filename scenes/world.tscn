@@ -6,8 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://buknjq7fojvjm" path="res://scenes/item/barrel.tscn" id="4_k0juu"]
 [ext_resource type="PackedScene" uid="uid://urnuf5mv7ih5" path="res://scenes/characters/basicEnemy.tscn" id="5_71j4m"]
 [ext_resource type="PackedScene" uid="uid://uew7uu2aseqc" path="res://scenes/characters/GoonEnemy.tscn" id="6_i7141"]
-[ext_resource type="PackedScene" uid="uid://ded4hcv5tm61t" path="res://scenes/item/knife.tscn" id="6_qfnet"]
+[ext_resource type="PackedScene" uid="uid://clqck6kawlwhi" path="res://scenes/item/knife.tscn" id="6_qfnet"]
 [ext_resource type="Script" uid="uid://bn5tathdvlyk8" path="res://scripts/Acters.cs" id="7_x4q2a"]
+[ext_resource type="PackedScene" uid="uid://ceb0lr3cyw2j3" path="res://scenes/item/gun.tscn" id="9_7r4gi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4wyf3"]
 size = Vector2(5.75, 53)
@@ -35,21 +36,26 @@ y_sort_enabled = true
 script = ExtResource("7_x4q2a")
 
 [node name="Player" parent="acters" unique_id=1715215883 instance=ExtResource("2_4wyf3")]
-position = Vector2(50, 44.1)
+position = Vector2(14, 52)
+hasGun = true
 flyPwoer = 100.0
 attackPowerDamage = 0
+ammo_left = 3
 
 [node name="Barrel" parent="acters" unique_id=1603968216 instance=ExtResource("4_k0juu")]
-position = Vector2(90, 47)
+position = Vector2(49, 59)
+item_by_destroy = 2
 
 [node name="PunkEnemy" parent="acters" unique_id=194633409 instance=ExtResource("5_71j4m")]
 position = Vector2(64, 68)
+max_health = 0
 attackPowerDamage = 0
 Knockback = 50.0
 knfieRespownTime = 2000
 
 [node name="GoonEnemy" parent="acters" unique_id=408042335 instance=ExtResource("6_i7141")]
 position = Vector2(90, 63)
+collision_layer = 32
 prepDurationAttackRangeTime = 500
 
 [node name="leftwall" type="AnimatableBody2D" parent="." unique_id=995481682]
@@ -72,3 +78,6 @@ shape = SubResource("RectangleShape2D_4wyf3")
 
 [node name="Collectible" parent="." unique_id=1702693805 instance=ExtResource("6_qfnet")]
 position = Vector2(22, 57)
+
+[node name="Collectible2" parent="." unique_id=738395009 instance=ExtResource("9_7r4gi")]
+position = Vector2(48, 28)

@@ -3,5 +3,7 @@
 [ext_resource type="Script" uid="uid://if6gp7xwlyxo" path="res://scripts/Shot.cs" id="1_0jult"]
 
 [node name="Line2D" type="Line2D" unique_id=531351644]
-default_color = Color(0.5461939, 0.93204063, 0.9231228, 1)
+width = 1.0
+default_color = Color(0.99902123, 0.9568966, 0.36356854, 0.99607843)
 script = ExtResource("1_0jult")
+shot_duration_time = 200.0

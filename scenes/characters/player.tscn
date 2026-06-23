@@ -881,9 +881,8 @@ size = Vector2(3, 3)
 collision_layer = 2
 collision_mask = 137
 script = ExtResource("2_76oj4")
-health = 30
-hasKnife = true
-hasGun = true
+auto_destroyed_on_drop = true
+max_health = 30
 speed = 35.0
 knockDown = 70.0
 durationGrounded = 1000.0
@@ -953,6 +952,9 @@ offset = Vector2(-24, -48)
 hframes = 10
 vframes = 10
 frame = 8
+
+[node name="RayCast2D" parent="." index="10" unique_id=1135694175]
+collision_mask = 4
 
 [node name="CollectibleSensor" parent="." index="11" unique_id=1462156502]
 collision_layer = 0

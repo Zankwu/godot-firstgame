@@ -23,15 +23,20 @@ public partial class Character : CharacterBody2D
 		{State.throwKnife,"throw"},
 		{State.pickup,"pickup"},
 		{State.shot,"shot"},
+		{State.PrepShot,"idle"},
 	};
 	public enum State
 	{
 		idle, walk, Attack, takeOff, jump, land, jumpKick, hurt, fall, grounded, deadth, fly,
-		PrepAttack, throwKnife, pickup, shot
+		PrepAttack, throwKnife, pickup, shot, PrepShot
 
 	}
+
+   [Export]
+    public bool auto_destroyed_on_drop;
+
 	[Export]
-	public int health;
+	public int max_health;
 	public int currentHealth;
 	public int currentDamage;
 
@@ -105,6 +110,11 @@ public partial class Character : CharacterBody2D
 	public int knfieRespownTime;
 
 	public ulong lastThrowKnifeTime;
+	private Collectible.Type collectibleType;
+
+	[Export]
+	public int ammo_left;
+	public int ammo_max = 3;
 
 
 	public override void _Ready()
@@ -131,7 +141,7 @@ public partial class Character : CharacterBody2D
 
 		//跳跃力度
 		jumpPwoer = 150;
-		currentHealth = health;
+		currentHealth = max_health;
 
 	}
 
@@ -145,6 +155,7 @@ public partial class Character : CharacterBody2D
 		HandleDeadth(delta);
 		HandleKnifeRespawns();
 		HandleAnimationChange();
+		HandlePrepShoot();
 		FlipSprites();
 		HandlePrepAttack();
 		damageEmitter.Monitoring = isAttacking();
@@ -160,12 +171,12 @@ public partial class Character : CharacterBody2D
 		setHeading();
 	}
 
-    private bool isAttacking()
-    {
-        return currentState == State.Attack || currentState == State.jumpKick;
-    }
+	private bool isAttacking()
+	{
+		return currentState == State.Attack || currentState == State.jumpKick;
+	}
 
-    public virtual void HandleKnifeRespawns()
+	public virtual void HandleKnifeRespawns()
 	{
 		if (!hasKnife)
 		{
@@ -179,6 +190,11 @@ public partial class Character : CharacterBody2D
 	}
 
 	public virtual void HandlePrepAttack()
+	{
+
+	}
+
+	public virtual void HandlePrepShoot()
 	{
 
 	}
@@ -304,7 +320,7 @@ public partial class Character : CharacterBody2D
 		if (areas.Count != 0)
 		{
 			Collectible collectType = areas[0] as Collectible;
-			if (!hasKnife && collectType.currentType == Collectible.Type.knife)
+			if (!hasKnife && !hasGun)
 			{
 				return true;
 			}
@@ -317,8 +333,19 @@ public partial class Character : CharacterBody2D
 		if (CanPickUp())
 		{
 			var areas = sensor.GetOverlappingAreas();
-			hasKnife = true;
-			areas[0].QueueFree();
+			Collectible collectible = areas[0] as Collectible;
+			if (collectible.currentType == Collectible.Type.knife)
+			{
+				hasKnife = true;
+
+			}
+			else if (collectible.currentType == Collectible.Type.gun)
+			{
+				hasGun = true;
+				ammo_left = ammo_max;
+			}
+
+			collectible.QueueFree();
 			currentState = State.idle;
 		}
 	}
@@ -359,16 +386,62 @@ public partial class Character : CharacterBody2D
 	{
 		currentState = State.idle;
 		hasKnife = false;
-		var knife_globalpositon = new Vector2(weaponPosition.GlobalPosition.X,GlobalPosition.Y);
+		var knife_globalpositon = new Vector2(weaponPosition.GlobalPosition.X, GlobalPosition.Y);
 
-		EntityManager.Instance.EmitSignal(EntityManager.SignalName.SpawnCollectibles, 
-		(int)Collectible.Type.knife, 
-		(int)Collectible.State.fly, 
-		knife_globalpositon, 
-		heading, 
-		-weaponPosition.Position.Y);
+		EntityManager.Instance.EmitSignal(EntityManager.SignalName.SpawnCollectibles,
+		(int)Collectible.Type.knife,
+		(int)Collectible.State.fly,
+		knife_globalpositon,
+		heading,
+		-weaponPosition.Position.Y,
+		auto_destroyed_on_drop);
 
 	}
+
+	public virtual void Shoot()
+	{
+		var weapon_root_position = new Vector2(weaponPosition.GlobalPosition.X, Position.Y);
+
+		if (ammo_left > 0)
+		{
+			currentState = State.shot;
+			Velocity = Vector2.Zero;
+			var target_point = heading * (this.GlobalPosition.X + GetViewport().GetVisibleRect().Size.X);
+			var target = rayCast.GetCollider();
+			if (target != null)
+			{
+				target_point = rayCast.GetCollisionPoint();
+				if (target is Character)
+				{
+					var against = target as Character;
+					against.OnReceiverCompleted(8, heading, (int)DamageReceiver.HitType.KNOCKDOWN);
+				}
+			}
+			var distance = target_point.X - weaponPosition.GlobalPosition.X;
+			EntityManager.Instance.EmitSignal(EntityManager.SignalName.SpawnShot,
+			weapon_root_position,
+			distance,
+			-weaponPosition.Position.Y,
+			true
+			);
+			
+		}
+		else
+		{
+			EntityManager.Instance.EmitSignal(EntityManager.SignalName.SpawnCollectibles,
+			(int)Collectible.Type.gun,
+			(int)Collectible.State.fly,
+			weapon_root_position,
+			heading,
+			-weaponPosition.Position.Y,
+			auto_destroyed_on_drop
+			);
+			hasGun = false;
+		}
+
+
+	}
+
 	public void completedTakeOffAction()
 	{
 		currentState = State.jump;
@@ -412,11 +485,34 @@ public partial class Character : CharacterBody2D
 			{
 				hasKnife = false;
 				lastThrowKnifeTime = Time.GetTicksMsec();
+				collectibleType = Collectible.Type.knife;
+				EntityManager.Instance.EmitSignal(EntityManager.SignalName.SpawnCollectibles,
+							(int)collectibleType,
+							(int)Collectible.State.fall,
+							GlobalPosition,
+							Vector2.Zero,
+							-weaponPosition.Position.Y,
+							auto_destroyed_on_drop
+							);
 			}
+			if (hasGun)
+			{
+				hasGun = false;
+				collectibleType = Collectible.Type.gun;
+				EntityManager.Instance.EmitSignal(EntityManager.SignalName.SpawnCollectibles,
+							(int)collectibleType,
+							(int)Collectible.State.fall,
+							GlobalPosition,
+							Vector2.Zero,
+							-weaponPosition.Position.Y,
+							auto_destroyed_on_drop
+							);
+				
+			}
+
+
 			canRespawnKnife = false;
-			GD.Print($"message: {canRespawnKnife}");
 			currentHealth -= damageTemp;
-			GD.Print($"currentHealth{currentHealth}");
 			if (currentHealth <= 0 || hitTypeInt == 1)
 			{
 				currentState = State.fall;
@@ -453,8 +549,12 @@ public partial class Character : CharacterBody2D
 		// 排除自身的 DamageReceiver
 		if (receiver.GetParent() == this) return;
 
-		var direction = Position.X - receiver.GlobalPosition.X < 0 ? Vector2.Right : Vector2.Left;
-		receiver.EmitSignal("DamageCompleted", damage, direction, (int)DamageReceiver.HitType.KNOCKDOWN);
+		// 只对 DamageReceiver 发射信号
+		if (receiver is DamageReceiver damageReceiver)
+		{
+			var direction = Position.X - receiver.GlobalPosition.X < 0 ? Vector2.Right : Vector2.Left;
+			damageReceiver.EmitSignal(DamageReceiver.SignalName.DamageCompleted, damage, direction, (int)DamageReceiver.HitType.KNOCKDOWN);
+		}
 	}
 
 

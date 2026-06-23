@@ -23,7 +23,8 @@ public partial class Collectible : Area2D
     public float heightSpeed = 0.0f;
     [Export]
     public float knockDown = 0.0f;
-
+    [Export]
+    public bool auto_destroyed;
 
     public State currentState = State.fall;
     public enum State
@@ -35,7 +36,11 @@ public partial class Collectible : Area2D
 
     public enum Type
     {
-        knife
+        knife,
+        gun,
+        food,
+        nothing
+
     }
     public AnimationPlayer collectiblePlayer;
 
@@ -103,19 +108,28 @@ public partial class Collectible : Area2D
             {
                 height = 0;
                 currentState = State.grounded;
+                if (auto_destroyed == true)
+                {
+                    QueueFree();
+                }
             }
             else
             {
                 heightSpeed -= (float)(GRAVITY * delta);
             }
+
         }
+
 
     }
 
     public void onDamage(Area2D area2D)
     {
-
-        area2D.EmitSignal(DamageReceiver.SignalName.DamageCompleted, damage, direction, (int)DamageReceiver.HitType.KNOCKDOWN);
+        // 只对 DamageReceiver 发射信号
+        if (area2D is DamageReceiver damageReceiver)
+        {
+            damageReceiver.EmitSignal(DamageReceiver.SignalName.DamageCompleted, damage, direction, (int)DamageReceiver.HitType.KNOCKDOWN);
+        }
         QueueFree();
     }
 }
