@@ -32,8 +32,12 @@ public partial class Character : CharacterBody2D
 
 	}
 
-   [Export]
-    public bool auto_destroyed_on_drop;
+	[Export]
+	public bool auto_destroyed_on_drop;
+
+	[Export]
+	public float time_duration_last_attack;
+	public float time_since_last_attack;
 
 	[Export]
 	public int max_health;
@@ -344,6 +348,13 @@ public partial class Character : CharacterBody2D
 				hasGun = true;
 				ammo_left = ammo_max;
 			}
+			else if (collectible.currentType == Collectible.Type.food)
+			{
+				GD.Print($"currentHealth: {currentHealth}");
+
+				currentHealth = max_health;
+				GD.Print($"currentHealth: {currentHealth}");
+			}
 
 			collectible.QueueFree();
 			currentState = State.idle;
@@ -421,10 +432,8 @@ public partial class Character : CharacterBody2D
 			EntityManager.Instance.EmitSignal(EntityManager.SignalName.SpawnShot,
 			weapon_root_position,
 			distance,
-			-weaponPosition.Position.Y,
-			true
+			-weaponPosition.Position.Y
 			);
-			
 		}
 		else
 		{
@@ -481,6 +490,7 @@ public partial class Character : CharacterBody2D
 	{
 		if (CanGetHurt())
 		{
+			attackIndex = 0;
 			if (hasKnife)
 			{
 				hasKnife = false;
@@ -507,7 +517,7 @@ public partial class Character : CharacterBody2D
 							-weaponPosition.Position.Y,
 							auto_destroyed_on_drop
 							);
-				
+
 			}
 
 
@@ -549,12 +559,8 @@ public partial class Character : CharacterBody2D
 		// 排除自身的 DamageReceiver
 		if (receiver.GetParent() == this) return;
 
-		// 只对 DamageReceiver 发射信号
-		if (receiver is DamageReceiver damageReceiver)
-		{
-			var direction = Position.X - receiver.GlobalPosition.X < 0 ? Vector2.Right : Vector2.Left;
-			damageReceiver.EmitSignal(DamageReceiver.SignalName.DamageCompleted, damage, direction, (int)DamageReceiver.HitType.KNOCKDOWN);
-		}
+		var direction = Position.X - receiver.GlobalPosition.X < 0 ? Vector2.Right : Vector2.Left;
+		receiver.EmitSignal(DamageReceiver.SignalName.DamageCompleted, damage, direction, (int)DamageReceiver.HitType.KNOCKDOWN);
 	}
 
 

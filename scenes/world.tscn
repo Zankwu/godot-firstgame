@@ -40,7 +40,6 @@ position = Vector2(14, 52)
 hasGun = true
 flyPwoer = 100.0
 attackPowerDamage = 0
-ammo_left = 3
 
 [node name="Barrel" parent="acters" unique_id=1603968216 instance=ExtResource("4_k0juu")]
 position = Vector2(49, 59)
@@ -48,6 +47,7 @@ item_by_destroy = 2
 
 [node name="PunkEnemy" parent="acters" unique_id=194633409 instance=ExtResource("5_71j4m")]
 position = Vector2(64, 68)
+time_duration_last_attack = 0.0
 max_health = 0
 attackPowerDamage = 0
 Knockback = 50.0
@@ -57,6 +57,9 @@ knfieRespownTime = 2000
 position = Vector2(90, 63)
 collision_layer = 32
 prepDurationAttackRangeTime = 500
+time_duration_last_attack = 0.0
+max_health = 1555
+hasGun = false
 
 [node name="leftwall" type="AnimatableBody2D" parent="." unique_id=995481682]
 position = Vector2(8, 12)
@@ -80,4 +83,4 @@ shape = SubResource("RectangleShape2D_4wyf3")
 position = Vector2(22, 57)
 
 [node name="Collectible2" parent="." unique_id=738395009 instance=ExtResource("9_7r4gi")]
-position = Vector2(48, 28)
+position = Vector2(19, 28)

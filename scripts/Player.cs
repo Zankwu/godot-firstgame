@@ -41,7 +41,6 @@ public partial class Player : Character
 		if (CanPunch() && Input.IsActionJustPressed("attack"))
 		{
 			currentState = State.Attack;
-			GD.Print($"currentHealth: {currentHealth}");
 			if (CanPickUp())
 			{
 				currentState = State.pickup;
@@ -55,15 +54,17 @@ public partial class Player : Character
 				
 				Shoot();
 			}
-			else if (canCombo)
+			else if (canCombo && (Time.GetTicksMsec() - time_since_last_attack < time_duration_last_attack))
 			{
 
 				attackIndex++;
 				canCombo = false;
+				time_since_last_attack = Time.GetTicksMsec();
 			}
 			else
 			{
 				attackIndex = 0;
+				time_since_last_attack = Time.GetTicksMsec();
 			}
 
 			attackIndex = attackIndex % attackAnimations.Count();
@@ -71,6 +72,7 @@ public partial class Player : Character
 
 		if (CanJump() && Input.IsActionJustPressed("jump"))
 		{
+			attackIndex = 0;
 			heightSpeed = jumpPwoer;
 			currentState = State.takeOff;
 		}

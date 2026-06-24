@@ -90,6 +90,7 @@ public partial class Collectible : Area2D
         collectibleSprite2D.Position = Vector2.Up * height;
         Position += direction * speed * (float)delta;
         HandleAnimation();
+
     }
 
     private void HandleAnimation()
@@ -100,6 +101,8 @@ public partial class Collectible : Area2D
 
     private void HandleFall(double delta)
     {
+        var modulate = Modulate;
+
         if (currentState == State.fall)
         {
             height += (float)(heightSpeed * delta);
@@ -108,15 +111,21 @@ public partial class Collectible : Area2D
             {
                 height = 0;
                 currentState = State.grounded;
-                if (auto_destroyed == true)
-                {
-                    QueueFree();
-                }
+
             }
             else
             {
                 heightSpeed -= (float)(GRAVITY * delta);
+
             }
+            if (auto_destroyed == true)
+                modulate.A *= (float)delta * height;
+            if (modulate.A <= 0)
+            {
+                QueueFree();
+            }
+
+
 
         }
 
@@ -125,11 +134,8 @@ public partial class Collectible : Area2D
 
     public void onDamage(Area2D area2D)
     {
-        // 只对 DamageReceiver 发射信号
-        if (area2D is DamageReceiver damageReceiver)
-        {
-            damageReceiver.EmitSignal(DamageReceiver.SignalName.DamageCompleted, damage, direction, (int)DamageReceiver.HitType.KNOCKDOWN);
-        }
+
+        area2D.EmitSignal(DamageReceiver.SignalName.DamageCompleted, damage, direction, (int)DamageReceiver.HitType.KNOCKDOWN);
         QueueFree();
     }
 }

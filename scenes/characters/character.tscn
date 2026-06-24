@@ -11,6 +11,7 @@
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_rkhd4")
+time_duration_last_attack = 2000.0
 damage = 4
 speed = 5.0
 flyPwoer = 111.0

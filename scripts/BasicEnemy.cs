@@ -155,7 +155,6 @@ public partial class BasicEnemy : Character
 		if (Time.GetTicksMsec() - (ulong)rangeReadySinceAttackTime > (ulong)prepDurationAttackRangeTime  && currentState == State.PrepShot)
 		{
 			Shoot();	 
-			GD.Print($"Time.GetTicksMsec(): {currentState}");
 			rangeLastSinceAttackTime = Time.GetTicksMsec();
 		}
 
