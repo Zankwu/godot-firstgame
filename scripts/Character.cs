@@ -24,11 +24,12 @@ public partial class Character : CharacterBody2D
 		{State.pickup,"pickup"},
 		{State.shot,"shot"},
 		{State.PrepShot,"idle"},
+		{State.Recover,"recover"},
 	};
 	public enum State
 	{
 		idle, walk, Attack, takeOff, jump, land, jumpKick, hurt, fall, grounded, deadth, fly,
-		PrepAttack, throwKnife, pickup, shot, PrepShot
+		PrepAttack, throwKnife, pickup, shot, PrepShot,Recover
 
 	}
 
@@ -71,13 +72,13 @@ public partial class Character : CharacterBody2D
 	[Export]
 	public float Knockback = 50f;
 	[Export]
-	private float knockDown;
+	public float knockDown;
 	[Export]
-	private float durationGrounded;
+	public float durationGrounded;
 	[Export]
-	private bool canRespawn;
+	public bool canRespawn;
 	public bool canCombo;
-	private ulong timeSinceGrounded = Time.GetTicksMsec();
+	public ulong timeSinceGrounded = Time.GetTicksMsec();
 
 
 	public string[] attackAnimations;
@@ -142,7 +143,6 @@ public partial class Character : CharacterBody2D
 		chainDamageEmitter.AreaEntered += ChainReaction;
 		lastThrowKnifeTime = Time.GetTicksMsec();
 
-
 		//跳跃力度
 		jumpPwoer = 150;
 		currentHealth = max_health;
@@ -171,11 +171,13 @@ public partial class Character : CharacterBody2D
 		playerSprite2D.Position = Vector2.Up * height;
 		knifeSprite2D.Position = Vector2.Up * height;
 		gunSprite.Position = Vector2.Up * height;
+		chainDamageEmitter.Monitoring = currentState == State.fly;
+
 		MoveAndSlide();
 		setHeading();
 	}
 
-	private bool isAttacking()
+	public virtual bool isAttacking()
 	{
 		return currentState == State.Attack || currentState == State.jumpKick;
 	}
@@ -219,7 +221,7 @@ public partial class Character : CharacterBody2D
 	}
 
 
-	private void HandleGrounded()
+	public virtual void HandleGrounded()
 	{
 		if (currentState == State.grounded && (Time.GetTicksMsec() - timeSinceGrounded > durationGrounded))
 		{
@@ -362,7 +364,7 @@ public partial class Character : CharacterBody2D
 	}
 
 
-	public bool CanGetHurt()
+	public virtual bool CanGetHurt()
 	{
 		return currentState == State.idle
 		|| currentState == State.walk || currentState == State.takeOff
@@ -388,7 +390,7 @@ public partial class Character : CharacterBody2D
 	}
 
 
-	public void completedIdleAction()
+	public virtual void completedIdleAction()
 	{
 		currentState = State.idle;
 	}
@@ -466,7 +468,7 @@ public partial class Character : CharacterBody2D
 	}
 
 	//伤害发射器
-	public void OnEmitCompleted(Node2D temp)
+	public virtual void OnEmitCompleted(Node2D temp)
 	{
 
 		var hitType = DamageReceiver.HitType.NORMAL;
@@ -543,7 +545,7 @@ public partial class Character : CharacterBody2D
 		}
 	}
 
-	private void OnWallHit(Node2D wall)
+	public virtual void OnWallHit(Node2D wall)
 	{
 
 		if (wall is AnimatableBody2D)

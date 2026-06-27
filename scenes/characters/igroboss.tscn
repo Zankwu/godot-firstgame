@@ -1,0 +1,235 @@
+[gd_scene format=3 uid="uid://b7dnpgn2v75w2"]
+
+[ext_resource type="PackedScene" uid="uid://8sw41tbjmjyy" path="res://scenes/characters/character.tscn" id="1_xmcut"]
+[ext_resource type="Texture2D" uid="uid://ck756b887y8qw" path="res://assets/art/characters/enemy_boss.png" id="2_vlnlu"]
+[ext_resource type="Script" uid="uid://bcs53mau5j6rj" path="res://scripts/Igroboss.cs" id="2_xmcut"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_vlnlu"]
+radius = 2.0
+height = 10.0
+
+[sub_resource type="Animation" id="Animation_sejjo"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0009999999),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [80]
+}
+
+[sub_resource type="Animation" id="Animation_c4nlc"]
+resource_name = "fall"
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [60, 61]
+}
+
+[sub_resource type="Animation" id="Animation_vlnlu"]
+resource_name = "fly"
+length = 0.1
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [43]
+}
+
+[sub_resource type="Animation" id="Animation_o0n8h"]
+resource_name = "grounded"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [62]
+}
+
+[sub_resource type="Animation" id="Animation_ibjn0"]
+resource_name = "hurt"
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [50, 51]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"completedIdleAction"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_bch8s"]
+resource_name = "idle"
+length = 0.1
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [80]
+}
+
+[sub_resource type="Animation" id="Animation_0gu8f"]
+resource_name = "recovery"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [70]
+}
+
+[sub_resource type="Animation" id="Animation_ikqoa"]
+resource_name = "wal"
+length = 0.8
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [90, 91, 92, 93, 94, 95, 96, 97]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xmcut"]
+_data = {
+&"RESET": SubResource("Animation_sejjo"),
+&"fall": SubResource("Animation_c4nlc"),
+&"fly": SubResource("Animation_vlnlu"),
+&"grounded": SubResource("Animation_o0n8h"),
+&"hurt": SubResource("Animation_ibjn0"),
+&"idle": SubResource("Animation_bch8s"),
+&"recover": SubResource("Animation_0gu8f"),
+&"walk": SubResource("Animation_ikqoa")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vlnlu"]
+size = Vector2(4.625, 3.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bch8s"]
+size = Vector2(9.5, 9.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ikqoa"]
+size = Vector2(6, 6)
+
+[node name="igro" unique_id=1715215883 instance=ExtResource("1_xmcut")]
+collision_layer = 4
+script = ExtResource("2_xmcut")
+player_target_distance = 30
+time_bettwen_attacks = 2000
+time_duration_recover = 2000
+max_health = 50
+damage = 5
+speed = 15.0
+attackPowerDamage = 0
+knockDown = 100.0
+
+[node name="CharacterSprite" parent="." index="1" unique_id=1849311222]
+texture = ExtResource("2_vlnlu")
+centered = false
+offset = Vector2(-24, -48)
+hframes = 10
+vframes = 10
+frame = 50
+
+[node name="CollisionShape2D" parent="." index="2" unique_id=1480655924]
+position = Vector2(0, -2)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_vlnlu")
+
+[node name="AnimationPlayer" parent="." index="3" unique_id=1862445129]
+libraries/ = SubResource("AnimationLibrary_xmcut")
+autoplay = &"idle"
+
+[node name="DamageEmitter" parent="." index="4" unique_id=1541520471]
+collision_mask = 16
+
+[node name="CollisionShape2D" parent="DamageEmitter" index="0" unique_id=712822009]
+position = Vector2(10, -10)
+shape = SubResource("RectangleShape2D_vlnlu")
+
+[node name="DamageReceiver" parent="." index="5" unique_id=1402504911]
+collision_layer = 32
+
+[node name="CollisionShape2D" parent="DamageReceiver" index="0" unique_id=2147298208]
+position = Vector2(1, -19)
+shape = SubResource("RectangleShape2D_bch8s")
+
+[node name="ChainDamageEmitter" parent="." index="6" unique_id=253260739]
+collision_mask = 128
+
+[node name="CollisionShape2D2" parent="ChainDamageEmitter" index="1" unique_id=1647093855]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_ikqoa")
+debug_color = Color(0.8073643, 0.0022979546, 0.99311656, 0.41960785)
+
+[editable path="DamageEmitter"]
+[editable path="DamageReceiver"]

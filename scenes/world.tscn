@@ -4,10 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://cttcgsoqkj2d1" path="res://scenes/states/stage.tscn" id="1_rwgxs"]
 [ext_resource type="PackedScene" uid="uid://wn0vryqy40bl" path="res://scenes/characters/player.tscn" id="2_4wyf3"]
 [ext_resource type="PackedScene" uid="uid://buknjq7fojvjm" path="res://scenes/item/barrel.tscn" id="4_k0juu"]
-[ext_resource type="PackedScene" uid="uid://urnuf5mv7ih5" path="res://scenes/characters/basicEnemy.tscn" id="5_71j4m"]
-[ext_resource type="PackedScene" uid="uid://uew7uu2aseqc" path="res://scenes/characters/GoonEnemy.tscn" id="6_i7141"]
 [ext_resource type="PackedScene" uid="uid://clqck6kawlwhi" path="res://scenes/item/knife.tscn" id="6_qfnet"]
 [ext_resource type="Script" uid="uid://bn5tathdvlyk8" path="res://scripts/Acters.cs" id="7_x4q2a"]
+[ext_resource type="PackedScene" uid="uid://b7dnpgn2v75w2" path="res://scenes/characters/igroboss.tscn" id="8_4mrxx"]
 [ext_resource type="PackedScene" uid="uid://ceb0lr3cyw2j3" path="res://scenes/item/gun.tscn" id="9_7r4gi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4wyf3"]
@@ -45,21 +44,9 @@ attackPowerDamage = 0
 position = Vector2(49, 59)
 item_by_destroy = 2
 
-[node name="PunkEnemy" parent="acters" unique_id=194633409 instance=ExtResource("5_71j4m")]
-position = Vector2(64, 68)
-time_duration_last_attack = 0.0
-max_health = 0
-attackPowerDamage = 0
-Knockback = 50.0
-knfieRespownTime = 2000
-
-[node name="GoonEnemy" parent="acters" unique_id=408042335 instance=ExtResource("6_i7141")]
-position = Vector2(90, 63)
-collision_layer = 32
-prepDurationAttackRangeTime = 500
-time_duration_last_attack = 0.0
-max_health = 1555
-hasGun = false
+[node name="igro" parent="acters" unique_id=304327036 instance=ExtResource("8_4mrxx")]
+position = Vector2(73, 49)
+durationGrounded = 1555.0
 
 [node name="leftwall" type="AnimatableBody2D" parent="." unique_id=995481682]
 position = Vector2(8, 12)

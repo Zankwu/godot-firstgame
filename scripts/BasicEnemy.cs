@@ -152,9 +152,9 @@ public partial class BasicEnemy : Character
 	}
 	public override void HandlePrepShoot()
 	{
-		if (Time.GetTicksMsec() - (ulong)rangeReadySinceAttackTime > (ulong)prepDurationAttackRangeTime  && currentState == State.PrepShot)
+		if (Time.GetTicksMsec() - (ulong)rangeReadySinceAttackTime > (ulong)prepDurationAttackRangeTime && currentState == State.PrepShot)
 		{
-			Shoot();	 
+			Shoot();
 			rangeLastSinceAttackTime = Time.GetTicksMsec();
 		}
 
@@ -194,13 +194,15 @@ public partial class BasicEnemy : Character
 
 	public bool CanRangeAttack()
 	{
-		if (Time.GetTicksMsec() - rangeLastSinceAttackTime 
+		if (Time.GetTicksMsec() - rangeLastSinceAttackTime
 			< (ulong)bettwenDurationAttackRangeTime)
 		{
 			return false;
 		}
 		return base.CanPunch();
 	}
+
+
 
 	public bool isPlayerWithInRange()
 	{
