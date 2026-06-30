@@ -172,6 +172,8 @@ public partial class Character : CharacterBody2D
 		HandlePrepShoot();
 		FlipSprites();
 		HandlePrepAttack();
+		HandlerAirTime(delta);
+
 		damageEmitter.Monitoring = isAttacking();
 		damageReceiver.Monitorable = CanGetHurt();
 		knifeSprite2D.Visible = hasKnife;
@@ -263,6 +265,10 @@ public partial class Character : CharacterBody2D
 	;
 		}
 
+	}
+
+	private void HandlerAirTime(double delta)
+	{
 		if (currentState == State.jump || currentState == State.jumpKick || currentState == State.fall)
 		{
 			height += heightSpeed * (float)delta;
@@ -288,7 +294,6 @@ public partial class Character : CharacterBody2D
 
 		}
 	}
-
 
 	public void HandleAnimationChange()
 	{

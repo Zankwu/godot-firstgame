@@ -149,7 +149,6 @@ public partial class BasicEnemy : Character
 				Velocity = direciton * speed;
 			}
 		}
-		GD.Print($"playerSlot: {playerSlot}");
 	}
 	public override void HandlePrepShoot()
 	{

@@ -1,11 +1,14 @@
 [gd_scene format=3 uid="uid://cttcgsoqkj2d1"]
 
+[ext_resource type="Script" uid="uid://3g72df0js47s" path="res://scripts/stage/Stage.cs" id="1_fli1c"]
 [ext_resource type="PackedScene" uid="uid://buaksl6gcy0om" path="res://scenes/states/checkpoint.tscn" id="1_s8gb1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8rem4"]
 size = Vector2(421, 20)
 
-[node name="Stage" type="Node2D" unique_id=1737446139]
+[node name="Stage" type="Node2D" unique_id=1737446139 node_paths=PackedStringArray("Containers")]
+script = ExtResource("1_fli1c")
+Containers = NodePath("containers")
 
 [node name="BackGround" type="Node2D" parent="." unique_id=245229186]
 

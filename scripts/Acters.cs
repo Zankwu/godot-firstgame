@@ -29,10 +29,16 @@ public partial class Acters : Node2D
 		entityManager.SpawnCollectibles += OnCollectibleSpawn;
 		entityManager.SpawnShot += OnShotSpawn;
 		entityManager.SpawnEnemy += OnEnemySpawn;
+		StageManager.Instance.OrphanActor += OrphanReparentActor;
 		player = GetNode<Player>("Player");
 	}
 
-	public void OnEnemySpawn(EnemyData enemy)
+    private void OrphanReparentActor(Node2D collectible)
+    {
+        collectible.Reparent(this);
+    }
+
+    public void OnEnemySpawn(EnemyData enemy)
 	{
 		PackedScene packed = ResourceLoader.Load<PackedScene>(preEnemyData[enemy.characterType]);
 		var enemy_temp = packed.Instantiate() as Character;

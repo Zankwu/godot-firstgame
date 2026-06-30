@@ -10,10 +10,14 @@ public partial class StageManager : Node
     {
         Instance = this;
     }
-    
+
     [Signal]
     public delegate void CheckPointStartEventHandler();
 
     [Signal]
     public delegate void CheckPointEndEventHandler();
+
+
+    [Signal]
+    public delegate void OrphanActorEventHandler(Node2D collectible);
 }
