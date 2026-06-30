@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public partial class Acters : Node2D
 {
+	[Export]
+	public Player player;
+
 	public const string SHOT_PREFAB = "res://scenes/item/shot.tscn";
 	public Dictionary<Collectible.Type, string> preScence = new() {
 			{Collectible.Type.knife,"res://scenes/item/knife.tscn"},
@@ -11,15 +14,34 @@ public partial class Acters : Node2D
 			{Collectible.Type.food,"res://scenes/item/food.tscn"}
 	};
 
+	public Dictionary<Character.CharacterType, string> preEnemyData = new() {
+			{Character.CharacterType.GOON,"res://scenes/characters/GoonEnemy.tscn"},
+			{Character.CharacterType.BOUNCER,"res://scenes/characters/igroboss.tscn"},
+			{Character.CharacterType.PUNK,"res://scenes/characters/basicEnemy.tscn"},
+			
+	};
+
+
 
 	public override void _Ready()
 	{
 		EntityManager entityManager = EntityManager.Instance;
 		entityManager.SpawnCollectibles += OnCollectibleSpawn;
 		entityManager.SpawnShot += OnShotSpawn;
+		entityManager.SpawnEnemy += OnEnemySpawn;
+		player = GetNode<Player>("Player");
 	}
 
-
+	public void OnEnemySpawn(EnemyData enemy)
+	{
+		PackedScene packed = ResourceLoader.Load<PackedScene>(preEnemyData[enemy.characterType]);
+		var enemy_temp = packed.Instantiate() as Character;
+		enemy_temp.GlobalPosition = enemy.GlobalPosition;
+		enemy_temp.Type = enemy.characterType;
+		enemy_temp.player = player;
+		GD.Print($"enemy_temp.player: {enemy_temp.player}");
+		AddChild(enemy_temp);
+	}
 
 	public void OnCollectibleSpawn(int intType, int intState,
 	Vector2 collectiblePosition, Vector2 direction, float height, bool auto_destroyed)
@@ -43,6 +65,5 @@ public partial class Acters : Node2D
 		AddChild(shot);
 		shot.Position = gun_root_position;
 		shot.initialize(distance, gun_height);
-
 	}
 }

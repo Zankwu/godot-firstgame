@@ -19,4 +19,9 @@ public partial class EntityManager : Node
     [Signal]
     public delegate void SpawnShotEventHandler(Vector2 gun_root_position,float distance , float gun_height);
 
+    [Signal]
+    public delegate void SpawnEnemyEventHandler(EnemyData enemy);
+
+    [Signal]
+    public delegate void OnEnemyDeathEventHandler();
 }

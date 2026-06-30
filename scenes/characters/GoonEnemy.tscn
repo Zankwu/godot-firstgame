@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cjlullb74g6ng" path="res://assets/art/characters/enemy_goon.png" id="2_08bl0"]
 
 [node name="Character" unique_id=1715215883 instance=ExtResource("1_vwhyb")]
+Type = 2
 max_health = 20
 hasGun = true
 canRespawnKnife = false
@@ -17,9 +18,6 @@ texture = ExtResource("2_08bl0")
 
 [node name="DamageEmitter" parent="." index="4" unique_id=1541520471]
 scale = Vector2(0.485, 0.485)
-
-[node name="ChainDamageEmitter" parent="." index="6" unique_id=253260739]
-monitoring = true
 
 [editable path="DamageEmitter"]
 [editable path="DamageReceiver"]

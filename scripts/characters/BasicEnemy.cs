@@ -5,8 +5,8 @@ using System.Linq;
 public partial class BasicEnemy : Character
 {
 
-	[Export]
-	public Player player;
+	// [Export]
+	// public Player player;
 
 
 	//近战攻击间隔
@@ -149,6 +149,7 @@ public partial class BasicEnemy : Character
 				Velocity = direciton * speed;
 			}
 		}
+		GD.Print($"playerSlot: {playerSlot}");
 	}
 	public override void HandlePrepShoot()
 	{

@@ -6,6 +6,8 @@ using System.Linq;
 
 public partial class Character : CharacterBody2D
 {
+	[Export]
+	public Player player;
 	protected Dictionary<State, string> stateAnima = new()
 	{
 		{State.idle,"idle"},
@@ -29,9 +31,17 @@ public partial class Character : CharacterBody2D
 	public enum State
 	{
 		idle, walk, Attack, takeOff, jump, land, jumpKick, hurt, fall, grounded, deadth, fly,
-		PrepAttack, throwKnife, pickup, shot, PrepShot,Recover
-
+		PrepAttack, throwKnife, pickup, shot, PrepShot, Recover
 	}
+
+
+	public enum CharacterType
+	{
+		PLAYER, PUNK, GOON, THUG, BOUNCER
+	}
+
+	[Export]
+	public CharacterType Type;
 
 	[Export]
 	public bool auto_destroyed_on_drop;
@@ -214,8 +224,9 @@ public partial class Character : CharacterBody2D
 			Modulate = new Color(Modulate, Modulate.A - (float)delta);
 			if (Modulate.A <= 0)
 			{
-				QueueFree();
+				EntityManager.Instance.EmitSignal(EntityManager.SignalName.OnEnemyDeath);
 
+				QueueFree();
 			}
 		}
 	}

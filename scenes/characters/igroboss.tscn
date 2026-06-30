@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://8sw41tbjmjyy" path="res://scenes/characters/character.tscn" id="1_xmcut"]
 [ext_resource type="Texture2D" uid="uid://ck756b887y8qw" path="res://assets/art/characters/enemy_boss.png" id="2_vlnlu"]
-[ext_resource type="Script" uid="uid://bcs53mau5j6rj" path="res://scripts/Igroboss.cs" id="2_xmcut"]
+[ext_resource type="Script" uid="uid://bcs53mau5j6rj" path="res://scripts/characters/Igroboss.cs" id="2_xmcut"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_vlnlu"]
 radius = 2.0
@@ -17,7 +17,7 @@ tracks/0/path = NodePath("CharacterSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.0009999999),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [80]
@@ -186,6 +186,7 @@ script = ExtResource("2_xmcut")
 player_target_distance = 30
 time_bettwen_attacks = 2000
 time_duration_recover = 2000
+Type = 4
 max_health = 50
 damage = 5
 speed = 15.0
@@ -198,7 +199,7 @@ centered = false
 offset = Vector2(-24, -48)
 hframes = 10
 vframes = 10
-frame = 50
+frame = 80
 
 [node name="CollisionShape2D" parent="." index="2" unique_id=1480655924]
 position = Vector2(0, -2)

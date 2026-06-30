@@ -1,12 +1,11 @@
 [gd_scene format=3 uid="uid://cbmniyec8mehn"]
 
 [ext_resource type="Script" uid="uid://bieo8whl25y1n" path="res://scripts/World.cs" id="1_4wyf3"]
-[ext_resource type="PackedScene" uid="uid://cttcgsoqkj2d1" path="res://scenes/states/stage.tscn" id="1_rwgxs"]
 [ext_resource type="PackedScene" uid="uid://wn0vryqy40bl" path="res://scenes/characters/player.tscn" id="2_4wyf3"]
 [ext_resource type="PackedScene" uid="uid://buknjq7fojvjm" path="res://scenes/item/barrel.tscn" id="4_k0juu"]
 [ext_resource type="PackedScene" uid="uid://clqck6kawlwhi" path="res://scenes/item/knife.tscn" id="6_qfnet"]
 [ext_resource type="Script" uid="uid://bn5tathdvlyk8" path="res://scripts/Acters.cs" id="7_x4q2a"]
-[ext_resource type="PackedScene" uid="uid://b7dnpgn2v75w2" path="res://scenes/characters/igroboss.tscn" id="8_4mrxx"]
+[ext_resource type="PackedScene" uid="uid://dwtfirgpkqkfy" path="res://scenes/states/stage_01.tscn" id="8_7r4gi"]
 [ext_resource type="PackedScene" uid="uid://ceb0lr3cyw2j3" path="res://scenes/item/gun.tscn" id="9_7r4gi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4wyf3"]
@@ -17,10 +16,11 @@ script = ExtResource("1_4wyf3")
 player = NodePath("acters/Player")
 camera = NodePath("camera")
 
-[node name="Stage" parent="." unique_id=1737446139 instance=ExtResource("1_rwgxs")]
+[node name="stage01" parent="." unique_id=1737446139 instance=ExtResource("8_7r4gi")]
 
 [node name="camera" type="Camera2D" parent="." unique_id=1900903178]
 position = Vector2(50, 32)
+position_smoothing_speed = 3.0
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="camera" unique_id=428562704]
 position = Vector2(-42, -20)
@@ -35,18 +35,15 @@ y_sort_enabled = true
 script = ExtResource("7_x4q2a")
 
 [node name="Player" parent="acters" unique_id=1715215883 instance=ExtResource("2_4wyf3")]
-position = Vector2(14, 52)
-hasGun = true
+position = Vector2(74, 50)
+damage = 55
+speed = 55.0
 flyPwoer = 100.0
 attackPowerDamage = 0
 
 [node name="Barrel" parent="acters" unique_id=1603968216 instance=ExtResource("4_k0juu")]
 position = Vector2(49, 59)
 item_by_destroy = 2
-
-[node name="igro" parent="acters" unique_id=304327036 instance=ExtResource("8_4mrxx")]
-position = Vector2(73, 49)
-durationGrounded = 1555.0
 
 [node name="leftwall" type="AnimatableBody2D" parent="." unique_id=995481682]
 position = Vector2(8, 12)
@@ -71,3 +68,7 @@ position = Vector2(22, 57)
 
 [node name="Collectible2" parent="." unique_id=738395009 instance=ExtResource("9_7r4gi")]
 position = Vector2(19, 28)
+
+[editable path="acters/Player"]
+[editable path="acters/Player/DamageEmitter"]
+[editable path="acters/Player/DamageReceiver"]

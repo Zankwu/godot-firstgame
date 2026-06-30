@@ -39,8 +39,6 @@ public partial class Igroboss : Character
         return currentState == State.fly;
     }
 
-
-
     public override bool CanGetHurt()
     {
         return true;

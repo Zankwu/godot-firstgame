@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://dwtfirgpkqkfy"]
+
+[ext_resource type="PackedScene" uid="uid://cttcgsoqkj2d1" path="res://scenes/states/stage.tscn" id="1_uovsj"]
+[ext_resource type="Texture2D" uid="uid://b2ijhmj67ylrh" path="res://assets/art/backgrounds/street-background.png" id="2_fmm6y"]
+[ext_resource type="PackedScene" uid="uid://uew7uu2aseqc" path="res://scenes/characters/GoonEnemy.tscn" id="3_5q1bh"]
+[ext_resource type="PackedScene" uid="uid://urnuf5mv7ih5" path="res://scenes/characters/basicEnemy.tscn" id="4_vm70w"]
+[ext_resource type="PackedScene" uid="uid://buaksl6gcy0om" path="res://scenes/states/checkpoint.tscn" id="5_vm70w"]
+[ext_resource type="PackedScene" uid="uid://buknjq7fojvjm" path="res://scenes/item/barrel.tscn" id="6_adg4y"]
+
+[node name="stage01" unique_id=1737446139 instance=ExtResource("1_uovsj")]
+
+[node name="backgroundmain" parent="BackGround" parent_id_path=PackedInt32Array(245229186) index="0" unique_id=1261377208]
+texture = ExtResource("2_fmm6y")
+
+[node name="Character" parent="checkpoints/checkpoint/enemy" parent_id_path=PackedInt32Array(1444186178, 182237964) index="0" unique_id=1715215883 instance=ExtResource("4_vm70w")]
+position = Vector2(108, 59)
+
+[node name="Character2" parent="checkpoints/checkpoint/enemy" parent_id_path=PackedInt32Array(1444186178, 182237964) index="1" unique_id=133804596 instance=ExtResource("4_vm70w")]
+position = Vector2(100, 28)
+
+[node name="Character3" parent="checkpoints/checkpoint/enemy" parent_id_path=PackedInt32Array(1444186178, 182237964) index="2" unique_id=1731962304 instance=ExtResource("3_5q1bh")]
+position = Vector2(203, 55)
+
+[node name="Character4" parent="checkpoints/checkpoint/enemy" parent_id_path=PackedInt32Array(1444186178, 182237964) index="3" unique_id=36691895 instance=ExtResource("3_5q1bh")]
+position = Vector2(201, 23)
+
+[node name="PlayerDetectionArea" parent="checkpoints/checkpoint" parent_id_path=PackedInt32Array(1444186178) index="1" unique_id=165396895]
+position = Vector2(94, 1)
+
+[node name="playercheck" parent="checkpoints/checkpoint/PlayerDetectionArea" index="0" unique_id=973019549]
+position = Vector2(56, -1)
+
+[node name="checkscope" parent="checkpoints/checkpoint/CheckPointArea" parent_id_path=PackedInt32Array(1444186178, 1073644236) index="0" unique_id=1495073412]
+position = Vector2(150, 32)
+
+[node name="checkpoint2" parent="checkpoints" parent_id_path=PackedInt32Array(1587164561) index="1" unique_id=1444186178 node_paths=PackedStringArray("enemies") instance=ExtResource("5_vm70w")]
+position = Vector2(257, 0)
+enemies = NodePath("enemy")
+max_enemies = 3
+
+[node name="Character" parent="checkpoints/checkpoint2/enemy" parent_id_path=PackedInt32Array(1444186178, 182237964) index="0" unique_id=1032442713 instance=ExtResource("4_vm70w")]
+position = Vector2(40, 75)
+
+[node name="Character2" parent="checkpoints/checkpoint2/enemy" parent_id_path=PackedInt32Array(1444186178, 182237964) index="1" unique_id=946623174 instance=ExtResource("4_vm70w")]
+position = Vector2(65, 77)
+
+[node name="Character3" parent="checkpoints/checkpoint2/enemy" parent_id_path=PackedInt32Array(1444186178, 182237964) index="2" unique_id=1747326043 instance=ExtResource("4_vm70w")]
+position = Vector2(89, 77)
+
+[node name="Character4" parent="checkpoints/checkpoint2/enemy" parent_id_path=PackedInt32Array(1444186178, 182237964) index="3" unique_id=1588143604 instance=ExtResource("4_vm70w")]
+position = Vector2(12, 42)
+
+[node name="Character5" parent="checkpoints/checkpoint2/enemy" parent_id_path=PackedInt32Array(1444186178, 182237964) index="4" unique_id=327803912 instance=ExtResource("4_vm70w")]
+position = Vector2(10, 61)
+
+[node name="Character6" parent="checkpoints/checkpoint2/enemy" parent_id_path=PackedInt32Array(1444186178, 182237964) index="5" unique_id=905095881 instance=ExtResource("4_vm70w")]
+position = Vector2(107, 58)
+
+[node name="knfie" parent="containers" parent_id_path=PackedInt32Array(909216556) index="0" unique_id=1603968216 instance=ExtResource("6_adg4y")]
+position = Vector2(77, 48)
+
+[node name="food" parent="containers" parent_id_path=PackedInt32Array(909216556) index="1" unique_id=754909038 instance=ExtResource("6_adg4y")]
+position = Vector2(181, 45)
+item_by_destroy = 2
+
+[editable path="checkpoints/checkpoint"]
+[editable path="checkpoints/checkpoint2"]

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bc2i3ah7x2vsr"]
 
 [ext_resource type="Texture2D" uid="uid://bn2irjt8ujixn" path="res://assets/art/props/prop-shadow.png" id="1_avbxy"]
-[ext_resource type="Script" uid="uid://b1glhm5huhx02" path="res://scripts/Collectible.cs" id="1_q8l23"]
+[ext_resource type="Script" uid="uid://b1glhm5huhx02" path="res://scripts/item/Collectible.cs" id="1_q8l23"]
 [ext_resource type="PackedScene" uid="uid://c0jg2op1s8sj" path="res://scenes/colliders/damage_emitter.tscn" id="1_s24pf"]
 
 [node name="Collectible" type="Area2D" unique_id=1702693805]

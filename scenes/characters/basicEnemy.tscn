@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://8sw41tbjmjyy" path="res://scenes/characters/character.tscn" id="1_bsqqu"]
 [ext_resource type="Texture2D" uid="uid://dcldheiy6r7j2" path="res://assets/art/characters/enemy_punk.png" id="2_31of2"]
-[ext_resource type="Script" uid="uid://blrdllvg6o0ri" path="res://scripts/BasicEnemy.cs" id="2_tt8k1"]
+[ext_resource type="Script" uid="uid://blrdllvg6o0ri" path="res://scripts/characters/BasicEnemy.cs" id="2_tt8k1"]
 [ext_resource type="Texture2D" uid="uid://djn8a2gf10jxj" path="res://assets/art/characters/enemy_knife.png" id="4_j2ndh"]
 [ext_resource type="Texture2D" uid="uid://dj2pcrujrnm5r" path="res://assets/art/characters/enemy_gun.png" id="5_rb6qd"]
 
@@ -666,8 +666,8 @@ bettwenDurationAttackMeleeTime = 2000
 prepDurationAttackMeleeTime = 500
 bettwenDurationAttackRangeTime = 2000
 prepDurationAttackRangeTime = 1000
+Type = 1
 max_health = 24
-canRespawnKnife = true
 damage = 2
 speed = 25.0
 flyPwoer = 100.0

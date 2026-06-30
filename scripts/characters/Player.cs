@@ -86,6 +86,9 @@ public partial class Player : Character
 	//返回最近的slot
 	public EnemySlot ReserveSlot(BasicEnemy basciEnemy)
 	{
+		if (basciEnemy.IsQueuedForDeletion())
+			return null;
+
 		var avaliableSlots = enemySlots.FindAll(e => e.SlotIsFree());
 		if (avaliableSlots.Count <= 0)
 		{

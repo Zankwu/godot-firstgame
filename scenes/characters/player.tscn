@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://wn0vryqy40bl"]
 
 [ext_resource type="PackedScene" uid="uid://8sw41tbjmjyy" path="res://scenes/characters/character.tscn" id="1_3vyb7"]
-[ext_resource type="Script" uid="uid://db0rl38qe5siy" path="res://scripts/Player.cs" id="2_76oj4"]
+[ext_resource type="Script" uid="uid://db0rl38qe5siy" path="res://scripts/characters/Player.cs" id="2_76oj4"]
 [ext_resource type="Texture2D" uid="uid://cxg8d6qg72u72" path="res://assets/art/characters/player.png" id="2_yewv4"]
 [ext_resource type="PackedScene" uid="uid://un0rgm5xrqk3" path="res://scenes/enemy_slot.tscn" id="4_dyp2m"]
 [ext_resource type="Texture2D" uid="uid://c7oy0sgs2x2jr" path="res://assets/art/characters/player_knife.png" id="5_atpat"]
@@ -922,16 +922,16 @@ shape = SubResource("RectangleShape2D_atpat")
 [node name="EnemySlots" type="Node2D" parent="." index="6" unique_id=1574088523]
 
 [node name="EnemySlot3" parent="EnemySlots" index="0" unique_id=1787459939 instance=ExtResource("4_dyp2m")]
-position = Vector2(13, -3)
+position = Vector2(14, -4)
 
 [node name="EnemySlot4" parent="EnemySlots" index="1" unique_id=165489805 instance=ExtResource("4_dyp2m")]
-position = Vector2(13, 3)
+position = Vector2(14, 4)
 
 [node name="EnemySlot5" parent="EnemySlots" index="2" unique_id=108249647 instance=ExtResource("4_dyp2m")]
-position = Vector2(-14, -3)
+position = Vector2(-14, -4)
 
 [node name="EnemySlot6" parent="EnemySlots" index="3" unique_id=232924203 instance=ExtResource("4_dyp2m")]
-position = Vector2(-14, 3)
+position = Vector2(-14, 4)
 
 [node name="KnifeSprite" parent="." index="8" unique_id=595298464]
 texture = ExtResource("5_atpat")

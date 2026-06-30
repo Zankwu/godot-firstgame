@@ -10,7 +10,7 @@ public partial class EnemySlot : Node2D
 
 	public bool SlotIsFree()
 	{
-		return occupant == null;
+		return occupant == null ;
 	}
 
 	public void setSlot(BasicEnemy enemy)
