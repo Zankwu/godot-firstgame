@@ -27,11 +27,12 @@ public partial class Character : CharacterBody2D
 		{State.shot,"shot"},
 		{State.PrepShot,"idle"},
 		{State.Recover,"recover"},
+		{State.Drop,"idle"},
 	};
 	public enum State
 	{
 		idle, walk, Attack, takeOff, jump, land, jumpKick, hurt, fall, grounded, deadth, fly,
-		PrepAttack, throwKnife, pickup, shot, PrepShot, Recover
+		PrepAttack, throwKnife, pickup, shot, PrepShot, Recover,Drop
 	}
 
 
@@ -94,7 +95,7 @@ public partial class Character : CharacterBody2D
 	public string[] attackAnimations;
 	public int attackIndex = 0;
 
-	protected State currentState = State.idle;
+	public State currentState = State.idle;
 
 
 
@@ -269,7 +270,7 @@ public partial class Character : CharacterBody2D
 
 	private void HandlerAirTime(double delta)
 	{
-		if (currentState == State.jump || currentState == State.jumpKick || currentState == State.fall)
+		if (currentState == State.jump || currentState == State.jumpKick || currentState == State.fall || currentState == State.Drop)
 		{
 			height += heightSpeed * (float)delta;
 			if (height < 0)

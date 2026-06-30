@@ -45,7 +45,8 @@ public partial class Acters : Node2D
 		enemy_temp.GlobalPosition = enemy.GlobalPosition;
 		enemy_temp.Type = enemy.characterType;
 		enemy_temp.player = player;
-		GD.Print($"enemy_temp.player: {enemy_temp.player}");
+		enemy_temp.height = enemy.height;
+		enemy_temp.currentState = enemy.state;
 		AddChild(enemy_temp);
 	}
 

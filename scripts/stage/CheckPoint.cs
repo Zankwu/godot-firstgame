@@ -30,7 +30,8 @@ public partial class CheckPoint : Node2D
     {
         foreach (Character temp in enemies.GetChildren())
         {
-            enemy_data.Add(new EnemyData(temp.Type, temp.GlobalPosition));
+			
+			enemy_data.Add(new EnemyData(temp.height,temp.currentState,temp.Type, temp.GlobalPosition));
 
             temp.QueueFree();
         }

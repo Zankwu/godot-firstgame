@@ -13,7 +13,7 @@
 texture = ExtResource("2_fmm6y")
 
 [node name="Character" parent="checkpoints/checkpoint/enemy" parent_id_path=PackedInt32Array(1444186178, 182237964) index="0" unique_id=1715215883 instance=ExtResource("4_vm70w")]
-position = Vector2(108, 59)
+position = Vector2(145, -3)
 
 [node name="Character2" parent="checkpoints/checkpoint/enemy" parent_id_path=PackedInt32Array(1444186178, 182237964) index="1" unique_id=133804596 instance=ExtResource("4_vm70w")]
 position = Vector2(100, 28)
