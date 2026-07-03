@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bieo8whl25y1n" path="res://scripts/World.cs" id="1_4wyf3"]
 [ext_resource type="PackedScene" uid="uid://wn0vryqy40bl" path="res://scenes/characters/player.tscn" id="2_4wyf3"]
 [ext_resource type="PackedScene" uid="uid://clqck6kawlwhi" path="res://scenes/item/knife.tscn" id="6_qfnet"]
+[ext_resource type="PackedScene" uid="uid://dj6n3atb7p6f1" path="res://UI/UIcontroller.tscn" id="7_i7141"]
 [ext_resource type="Script" uid="uid://bn5tathdvlyk8" path="res://scripts/Acters.cs" id="7_x4q2a"]
 [ext_resource type="PackedScene" uid="uid://dwtfirgpkqkfy" path="res://scenes/states/stage_01.tscn" id="8_7r4gi"]
 [ext_resource type="PackedScene" uid="uid://ceb0lr3cyw2j3" path="res://scenes/item/gun.tscn" id="9_7r4gi"]
@@ -16,7 +17,6 @@ player = NodePath("acters/Player")
 camera = NodePath("camera")
 
 [node name="stage01" parent="." unique_id=1737446139 instance=ExtResource("8_7r4gi")]
-script = null
 
 [node name="camera" type="Camera2D" parent="." unique_id=1900903178]
 position = Vector2(50, 32)
@@ -65,6 +65,16 @@ position = Vector2(22, 57)
 [node name="Collectible2" parent="." unique_id=738395009 instance=ExtResource("9_7r4gi")]
 position = Vector2(19, 28)
 
+[node name="UIcontroller" parent="." unique_id=385669748 instance=ExtResource("7_i7141")]
+
+[node name="HealthBar" parent="UIcontroller" index="2" unique_id=180018711]
+offset_left = 12.0
+offset_top = 7.0
+offset_right = 12.0
+offset_bottom = 7.0
+
 [editable path="acters/Player"]
 [editable path="acters/Player/DamageEmitter"]
 [editable path="acters/Player/DamageReceiver"]
+[editable path="UIcontroller"]
+[editable path="UIcontroller/HealthBar"]

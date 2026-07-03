@@ -6,9 +6,11 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8rem4"]
 size = Vector2(421, 20)
 
-[node name="Stage" type="Node2D" unique_id=1737446139 node_paths=PackedStringArray("Containers")]
+[node name="Stage" type="Node2D" unique_id=1737446139 node_paths=PackedStringArray("Containers", "Doors", "checkPoints")]
 script = ExtResource("1_fli1c")
 Containers = NodePath("containers")
+Doors = NodePath("Doors")
+checkPoints = NodePath("checkpoints")
 
 [node name="BackGround" type="Node2D" parent="." unique_id=245229186]
 
@@ -35,5 +37,7 @@ shape = SubResource("RectangleShape2D_8rem4")
 enemies = NodePath("enemy")
 
 [node name="containers" type="Node2D" parent="." unique_id=909216556]
+
+[node name="Doors" type="Node2D" parent="." unique_id=1741485206]
 
 [editable path="checkpoints/checkpoint"]

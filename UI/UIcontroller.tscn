@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://dj6n3atb7p6f1"]
+
+[ext_resource type="Texture2D" uid="uid://piyaoq0panq4" path="res://assets/art/ui/avatars/avatar-goon.png" id="1_dy62j"]
+[ext_resource type="Texture2D" uid="uid://cluq1t10attca" path="res://assets/art/ui/avatars/avatar-player.png" id="1_lf3xr"]
+[ext_resource type="PackedScene" uid="uid://hjjfkack8e65" path="res://UI/HealthBar.tscn" id="3_3lkkg"]
+
+[node name="UIcontroller" type="CanvasLayer" unique_id=385669748]
+
+[node name="EnemyIcon" type="TextureRect" parent="." unique_id=1439173]
+layout_direction = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -89.0
+offset_bottom = -53.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_dy62j")
+
+[node name="PlayerIcon" type="TextureRect" parent="." unique_id=1906088883]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -89.0
+offset_bottom = -53.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_lf3xr")
+
+[node name="HealthBar" parent="." unique_id=180018711 instance=ExtResource("3_3lkkg")]
+
+[editable path="HealthBar"]

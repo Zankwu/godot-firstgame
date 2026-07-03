@@ -24,7 +24,17 @@ public partial class Player : Character
 			enemySlots.Add(s);
 		}
 
-
+	}
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		foreach (EnemySlot temp in enemySlots)
+		{
+			if (temp.occupant != null)
+			{
+				GD.Print($"temp.occupant:");
+			}
+		}
 	}
 
 
@@ -35,11 +45,14 @@ public partial class Player : Character
 		{
 			var direction = Input.GetVector("left", "right", "up", "down");
 
+
 			Velocity = direction * speed;
 		}
 
 		if (CanPunch() && Input.IsActionJustPressed("attack"))
 		{
+		DamageManager.Instance.EmitSignal(DamageManager.SignalName.HealthChange, currentHealth);
+
 			currentState = State.Attack;
 			if (CanPickUp())
 			{
@@ -51,7 +64,7 @@ public partial class Player : Character
 			}
 			else if (hasGun)
 			{
-				
+
 				Shoot();
 			}
 			else if (canCombo && (Time.GetTicksMsec() - time_since_last_attack < time_duration_last_attack))
@@ -86,8 +99,6 @@ public partial class Player : Character
 	//返回最近的slot
 	public EnemySlot ReserveSlot(BasicEnemy basciEnemy)
 	{
-		if (basciEnemy.IsQueuedForDeletion())
-			return null;
 
 		var avaliableSlots = enemySlots.FindAll(e => e.SlotIsFree());
 		if (avaliableSlots.Count <= 0)

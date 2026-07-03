@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://hjjfkack8e65"]
+
+[ext_resource type="Texture2D" uid="uid://bpna5evcecbsr" path="res://assets/art/ui/healthbar-tick.png" id="1_mrfbb"]
+[ext_resource type="Script" uid="uid://csreg7hst34ad" path="res://scripts/UI/HealthBar.cs" id="1_nhvnt"]
+
+[node name="HealthBar" type="Control" unique_id=180018711 node_paths=PackedStringArray("bar", "white", "Red")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nhvnt")
+bar = NodePath("bar")
+white = NodePath("white")
+Red = NodePath("red")
+
+[node name="white" type="ColorRect" parent="." unique_id=95772925]
+layout_mode = 0
+offset_right = 1.0
+offset_bottom = 4.0
+
+[node name="red" type="ColorRect" parent="." unique_id=186096482]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = 3.0
+color = Color(0.29346958, 0.02689852, 0, 1)
+
+[node name="bar" type="TextureRect" parent="." unique_id=597012506]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = 3.0
+texture = ExtResource("1_mrfbb")
+stretch_mode = 1

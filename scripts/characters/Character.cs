@@ -6,6 +6,9 @@ using System.Linq;
 
 public partial class Character : CharacterBody2D
 {
+	public int assigned_door_index = -1;
+
+
 	[Export]
 	public Player player;
 	protected Dictionary<State, string> stateAnima = new()
@@ -28,12 +31,14 @@ public partial class Character : CharacterBody2D
 		{State.PrepShot,"idle"},
 		{State.Recover,"recover"},
 		{State.Drop,"idle"},
+		{State.WAIT,"idle"},
 	};
 	public enum State
 	{
 		idle, walk, Attack, takeOff, jump, land, jumpKick, hurt, fall, grounded, deadth, fly,
-		PrepAttack, throwKnife, pickup, shot, PrepShot, Recover,Drop
-	}
+		PrepAttack, throwKnife, pickup, shot, PrepShot, Recover, Drop,
+        WAIT
+    }
 
 
 	public enum CharacterType
@@ -190,6 +195,10 @@ public partial class Character : CharacterBody2D
 		setHeading();
 	}
 
+	public virtual void AssignedDoor(Door door)
+	{
+		
+	}
 	public virtual bool isAttacking()
 	{
 		return currentState == State.Attack || currentState == State.jumpKick;

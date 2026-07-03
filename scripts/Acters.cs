@@ -7,6 +7,7 @@ public partial class Acters : Node2D
 	[Export]
 	public Player player;
 
+	public List<Door> doors = new List<Door>() ;
 	public const string SHOT_PREFAB = "res://scenes/item/shot.tscn";
 	public Dictionary<Collectible.Type, string> preScence = new() {
 			{Collectible.Type.knife,"res://scenes/item/knife.tscn"},
@@ -35,18 +36,26 @@ public partial class Acters : Node2D
 
     private void OrphanReparentActor(Node2D collectible)
     {
+		if(collectible is Door)
+		{
+			doors.Add(collectible as Door);
+		}
+
         collectible.Reparent(this);
     }
 
-    public void OnEnemySpawn(EnemyData enemy)
+    public void OnEnemySpawn(EnemyData enemy_data_temp)
 	{
-		PackedScene packed = ResourceLoader.Load<PackedScene>(preEnemyData[enemy.characterType]);
+		PackedScene packed = ResourceLoader.Load<PackedScene>(preEnemyData[enemy_data_temp.characterType]);
 		var enemy_temp = packed.Instantiate() as Character;
-		enemy_temp.GlobalPosition = enemy.GlobalPosition;
-		enemy_temp.Type = enemy.characterType;
+		enemy_temp.GlobalPosition = enemy_data_temp.GlobalPosition;
+		enemy_temp.Type = enemy_data_temp.characterType;
 		enemy_temp.player = player;
-		enemy_temp.height = enemy.height;
-		enemy_temp.currentState = enemy.state;
+		enemy_temp.height = enemy_data_temp.height;
+		enemy_temp.currentState = enemy_data_temp.state;
+		if(enemy_data_temp.door_index > -1){
+			enemy_temp.AssignedDoor(doors[enemy_data_temp.door_index]);
+		}
 		AddChild(enemy_temp);
 	}
 

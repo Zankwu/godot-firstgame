@@ -33,11 +33,11 @@ public partial class BasicEnemy : Character
 
 	public ulong durationTime;
 
+	public bool has_playerslot = false;
 
 
-
-
-	private EnemySlot playerSlot = null;
+	[Export]
+	public EnemySlot enemySlot = null;
 	public override void _Ready()
 	{
 		base._Ready();
@@ -46,6 +46,16 @@ public partial class BasicEnemy : Character
 		attackAnimations = ["punch", "punch_ait"];
 
 
+	}
+
+	public override void _ExitTree()
+	{
+		// base._ExitTree();
+		// if (enemySlot != null)
+		// {
+		// 	enemySlot.FreeSlot();
+		// 	enemySlot = null;
+		// }
 	}
 
 	public override void HandleInput()
@@ -63,6 +73,7 @@ public partial class BasicEnemy : Character
 				AttackWithMelee();
 			}
 		}
+
 	}
 
 	public void AttackWithRange()
@@ -114,26 +125,28 @@ public partial class BasicEnemy : Character
 			HandlePrepShoot();
 			// rangeLastSinceAttackTime = Time.GetTicksMsec();
 		}
+
 	}
 
 	public void AttackWithMelee()
 	{
+
 		if (CanPickUp())
 		{
 			currentState = State.pickup;
-			if (playerSlot != null)
+			if (enemySlot != null)
 			{
 				player.FreeSlot(this);
 			}
 		}
-		else if (playerSlot == null)
+		else if (enemySlot == null)
 		{
-			playerSlot = player.ReserveSlot(this);
+			enemySlot = player.ReserveSlot(this);
 		}
-		if (playerSlot != null)
+		if (enemySlot != null)
 		{
 
-			var direciton = (playerSlot.GlobalPosition - this.GlobalPosition).Normalized();
+			var direciton = (enemySlot.GlobalPosition - this.GlobalPosition).Normalized();
 			if (isPlayerWithInRange())
 			{
 				if (CanPunch())
@@ -150,6 +163,16 @@ public partial class BasicEnemy : Character
 			}
 		}
 	}
+	public override void AssignedDoor(Door door)
+	{
+		if (door.currentState != Door.State.OPENED)
+		{
+			currentState = State.WAIT;
+			door.OPEN();
+			door.Opened += completedIdleAction;
+		}
+	}
+
 	public override void HandlePrepShoot()
 	{
 		if (Time.GetTicksMsec() - (ulong)rangeReadySinceAttackTime > (ulong)prepDurationAttackRangeTime && currentState == State.PrepShot)
@@ -175,6 +198,7 @@ public partial class BasicEnemy : Character
 			// }
 		}
 	}
+
 
 	public override void HandleKnifeRespawns()
 	{
@@ -206,7 +230,7 @@ public partial class BasicEnemy : Character
 
 	public bool isPlayerWithInRange()
 	{
-		return (playerSlot.GlobalPosition - this.GlobalPosition).Length() < 1;
+		return (enemySlot.GlobalPosition - this.GlobalPosition).Length() < 1;
 	}
 	public override void setHeading()
 	{

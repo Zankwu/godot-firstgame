@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 EntityManager="*uid://leusighbo3p4"
 StageManager="*uid://clqx2plsiu8uv"
+DamageManager="*uid://ca2iqsaekhgqj"
 
 [display]
 
@@ -26,7 +27,7 @@ window/size/viewport_width=100
 window/size/viewport_height=64
 window/size/window_width_override=1000
 window/size/window_height_override=640
-window/stretch/mode="viewport"
+window/stretch/mode="canvas_items"
 window/stretch/scale_mode="integer"
 
 [dotnet]

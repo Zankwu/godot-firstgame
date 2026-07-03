@@ -19,25 +19,28 @@ public partial class CheckPoint : Node2D
 
 	public int enemies_alive;
 	public override void _Ready()
-    {
-		CreateEnemyData();
-        playerDetectionArea = GetNode<Area2D>("PlayerDetectionArea");
-        playerDetectionArea.BodyEntered += OncheckPoint;
-        EntityManager.Instance.OnEnemyDeath += HandleEnemyDeath;
-    }
+	{
+		playerDetectionArea = GetNode<Area2D>("PlayerDetectionArea");
+		playerDetectionArea.BodyEntered += OncheckPoint;
+		EntityManager.Instance.OnEnemyDeath += HandleEnemyDeath;
+	}
 
-    private void CreateEnemyData()
-    {
-        foreach (Character temp in enemies.GetChildren())
-        {
-			
-			enemy_data.Add(new EnemyData(temp.height,temp.currentState,temp.Type, temp.GlobalPosition));
+	public void CreateEnemyData()
+	{
+		foreach (Character temp in enemies.GetChildren())
+		{
+			enemy_data.Add(new EnemyData(temp.height, temp.currentState, temp.Type,
+			temp.GlobalPosition, temp.assigned_door_index));
+			// // 清除该敌人在玩家身上占用的 EnemySlot
+			// if (temp is BasicEnemy basicEnemy && basicEnemy.enemySlot != null)
+			// {
+			// 	basicEnemy.enemySlot.FreeSlot();
+			// }
+			temp.QueueFree();
+		}
+	}
 
-            temp.QueueFree();
-        }
-    }
-
-    private void HandleEnemyDeath()
+	private void HandleEnemyDeath()
 	{
 		enemies_alive -= 1;
 		if (enemies_alive == 0 && enemy_data.Count == 0)
@@ -70,7 +73,7 @@ public partial class CheckPoint : Node2D
 
 	private void HandleChecnkPoint()
 	{
-		
+
 		if (enemy_data.Count > 0 && is_activity && enemies_alive < max_enemies)
 		{
 			enemies_alive += 1;

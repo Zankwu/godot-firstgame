@@ -8,8 +8,9 @@ b = Vector2(0, 64)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5h1hk"]
 size = Vector2(100, 64)
 
-[node name="checkpoint" type="Node2D" unique_id=1444186178]
+[node name="checkpoint" type="Node2D" unique_id=1444186178 node_paths=PackedStringArray("enemies")]
 script = ExtResource("1_khdf7")
+enemies = NodePath("enemy")
 max_enemies = 2
 
 [node name="enemy" type="Node2D" parent="." unique_id=182237964]

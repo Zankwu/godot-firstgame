@@ -24,4 +24,6 @@ public partial class EntityManager : Node
 
     [Signal]
     public delegate void OnEnemyDeathEventHandler();
+
+
 }
