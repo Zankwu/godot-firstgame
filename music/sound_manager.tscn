@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://ctsxih8ao5iec"]
+
+[ext_resource type="Script" uid="uid://b15qonss6vf5v" path="res://music/SoundManager.cs" id="1_r620f"]
+[ext_resource type="AudioStream" uid="uid://di0ffnbtb6y44" path="res://assets/sfx/click.wav" id="2_hef0c"]
+[ext_resource type="AudioStream" uid="uid://b3y6kwixk3bo0" path="res://assets/sfx/eat-food.wav" id="3_g0lur"]
+[ext_resource type="AudioStream" uid="uid://bbfmx0sp66ode" path="res://assets/sfx/gogogo.wav" id="4_lnjkk"]
+[ext_resource type="AudioStream" uid="uid://ctfsk0327x8v2" path="res://assets/sfx/grunt.wav" id="5_j80ys"]
+[ext_resource type="AudioStream" uid="uid://2v2nyb6odfi3" path="res://assets/sfx/gunshot.wav" id="6_nmxxf"]
+[ext_resource type="AudioStream" uid="uid://dtwkq828codsh" path="res://assets/sfx/hit-1.wav" id="7_mgvqm"]
+[ext_resource type="AudioStream" uid="uid://b1551ahftg2m3" path="res://assets/sfx/hit-2.wav" id="8_c4gvp"]
+[ext_resource type="AudioStream" uid="uid://ycxhry11m5c7" path="res://assets/sfx/knife-hit.wav" id="9_66wad"]
+[ext_resource type="AudioStream" uid="uid://3tlpuliqf5k2" path="res://assets/sfx/miss.wav" id="10_fydw2"]
+
+[node name="SoundManager" type="Node" unique_id=1630780372 node_paths=PackedStringArray("SFXStreams")]
+script = ExtResource("1_r620f")
+SFXStreams = [NodePath("AudioStreamPlayer"), NodePath("AudioStreamPlayer2"), NodePath("AudioStreamPlayer3"), NodePath("AudioStreamPlayer4"), NodePath("AudioStreamPlayer5"), NodePath("AudioStreamPlayer6"), NodePath("AudioStreamPlayer7"), NodePath("AudioStreamPlayer8"), NodePath("AudioStreamPlayer9")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=118956795]
+stream = ExtResource("2_hef0c")
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="." unique_id=2120394694]
+stream = ExtResource("3_g0lur")
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="." unique_id=1752043027]
+stream = ExtResource("4_lnjkk")
+
+[node name="AudioStreamPlayer4" type="AudioStreamPlayer" parent="." unique_id=1305815736]
+stream = ExtResource("5_j80ys")
+
+[node name="AudioStreamPlayer5" type="AudioStreamPlayer" parent="." unique_id=1021439881]
+stream = ExtResource("6_nmxxf")
+
+[node name="AudioStreamPlayer6" type="AudioStreamPlayer" parent="." unique_id=1345132723]
+stream = ExtResource("7_mgvqm")
+
+[node name="AudioStreamPlayer7" type="AudioStreamPlayer" parent="." unique_id=711932191]
+stream = ExtResource("8_c4gvp")
+
+[node name="AudioStreamPlayer8" type="AudioStreamPlayer" parent="." unique_id=2138648355]
+stream = ExtResource("9_66wad")
+
+[node name="AudioStreamPlayer9" type="AudioStreamPlayer" parent="." unique_id=1045048153]
+stream = ExtResource("10_fydw2")

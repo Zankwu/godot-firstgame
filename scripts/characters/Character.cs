@@ -37,8 +37,8 @@ public partial class Character : CharacterBody2D
 	{
 		idle, walk, Attack, takeOff, jump, land, jumpKick, hurt, fall, grounded, deadth, fly,
 		PrepAttack, throwKnife, pickup, shot, PrepShot, Recover, Drop,
-        WAIT
-    }
+		WAIT
+	}
 
 
 	public enum CharacterType
@@ -102,6 +102,10 @@ public partial class Character : CharacterBody2D
 
 	public State currentState = State.idle;
 
+	// 防止一次攻击内重复造成伤害
+	private bool hasDealtDamageThisAttack = false;
+	private bool isPrevFrameAttacking = false;
+
 
 
 	//伤害发射器
@@ -162,7 +166,10 @@ public partial class Character : CharacterBody2D
 		//跳跃力度
 		jumpPwoer = 150;
 		currentHealth = max_health;
-
+		if (Type == CharacterType.PLAYER)
+		{
+			SetHealthBar(CharacterType.PLAYER, currentHealth);
+		}
 	}
 
 
@@ -179,6 +186,13 @@ public partial class Character : CharacterBody2D
 		FlipSprites();
 		HandlePrepAttack();
 		HandlerAirTime(delta);
+
+		// 检测是否刚进入攻击状态，重置本轮的伤害标志
+		if (isAttacking() && !isPrevFrameAttacking)
+		{
+			hasDealtDamageThisAttack = false;
+		}
+		isPrevFrameAttacking = isAttacking();
 
 		damageEmitter.Monitoring = isAttacking();
 		damageReceiver.Monitorable = CanGetHurt();
@@ -197,7 +211,7 @@ public partial class Character : CharacterBody2D
 
 	public virtual void AssignedDoor(Door door)
 	{
-		
+
 	}
 	public virtual bool isAttacking()
 	{
@@ -378,10 +392,11 @@ public partial class Character : CharacterBody2D
 			}
 			else if (collectible.currentType == Collectible.Type.food)
 			{
-				GD.Print($"currentHealth: {currentHealth}");
+
 
 				currentHealth = max_health;
-				GD.Print($"currentHealth: {currentHealth}");
+				SetHealthBar(Type, currentHealth);
+
 			}
 
 			collectible.QueueFree();
@@ -479,6 +494,13 @@ public partial class Character : CharacterBody2D
 
 	}
 
+	public void SetHealthBar(CharacterType type, int health)
+	{
+
+		DamageManager.Instance.EmitSignal(DamageManager.SignalName.HealthChange, (int)type, currentHealth, max_health);
+
+	}
+
 	public void completedTakeOffAction()
 	{
 		currentState = State.jump;
@@ -496,6 +518,9 @@ public partial class Character : CharacterBody2D
 	//伤害发射器
 	public virtual void OnEmitCompleted(Node2D temp)
 	{
+		// 本轮攻击已经造成过伤害，跳过防止重复
+		if (hasDealtDamageThisAttack) return;
+		hasDealtDamageThisAttack = true;
 
 		var hitType = DamageReceiver.HitType.NORMAL;
 		var direction = Position.X - temp.GlobalPosition.X < 0 ? Vector2.Right : Vector2.Left;
@@ -551,6 +576,9 @@ public partial class Character : CharacterBody2D
 
 			canRespawnKnife = false;
 			currentHealth -= damageTemp;
+
+			SetHealthBar(Type, currentHealth);
+
 			if (currentHealth <= 0 || hitTypeInt == 1)
 			{
 				currentState = State.fall;

@@ -24,6 +24,7 @@ public partial class Player : Character
 			enemySlots.Add(s);
 		}
 
+
 	}
 	public override void _Process(double delta)
 	{
@@ -51,9 +52,8 @@ public partial class Player : Character
 
 		if (CanPunch() && Input.IsActionJustPressed("attack"))
 		{
-		DamageManager.Instance.EmitSignal(DamageManager.SignalName.HealthChange, currentHealth);
 
-			currentState = State.Attack;
+
 			if (CanPickUp())
 			{
 				currentState = State.pickup;
@@ -67,17 +67,22 @@ public partial class Player : Character
 
 				Shoot();
 			}
-			else if (canCombo && (Time.GetTicksMsec() - time_since_last_attack < time_duration_last_attack))
-			{
-
-				attackIndex++;
-				canCombo = false;
-				time_since_last_attack = Time.GetTicksMsec();
-			}
 			else
 			{
-				attackIndex = 0;
-				time_since_last_attack = Time.GetTicksMsec();
+				currentState = State.Attack;
+				SoundManager.instance.Play(SoundManager.SFX.SWOOOO);
+				if (canCombo && (Time.GetTicksMsec() - time_since_last_attack < time_duration_last_attack))
+				{
+					attackIndex++;
+					canCombo = false;
+					time_since_last_attack = Time.GetTicksMsec();
+				}
+				else
+				{
+					attackIndex = 0;
+					time_since_last_attack = Time.GetTicksMsec();
+
+				}
 			}
 
 			attackIndex = attackIndex % attackAnimations.Count();

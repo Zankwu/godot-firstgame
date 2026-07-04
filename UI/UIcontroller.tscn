@@ -1,10 +1,15 @@
 [gd_scene format=3 uid="uid://dj6n3atb7p6f1"]
 
 [ext_resource type="Texture2D" uid="uid://piyaoq0panq4" path="res://assets/art/ui/avatars/avatar-goon.png" id="1_dy62j"]
+[ext_resource type="Script" uid="uid://c3p7sql0rbcc1" path="res://scripts/UI/UIcontroller.cs" id="1_eyhoy"]
 [ext_resource type="Texture2D" uid="uid://cluq1t10attca" path="res://assets/art/ui/avatars/avatar-player.png" id="1_lf3xr"]
 [ext_resource type="PackedScene" uid="uid://hjjfkack8e65" path="res://UI/HealthBar.tscn" id="3_3lkkg"]
 
-[node name="UIcontroller" type="CanvasLayer" unique_id=385669748]
+[node name="UIcontroller" type="CanvasLayer" unique_id=385669748 node_paths=PackedStringArray("playerHealthBar", "enemyHealthBar", "enemyIcon")]
+script = ExtResource("1_eyhoy")
+playerHealthBar = NodePath("PlayerBar")
+enemyHealthBar = NodePath("EnemyBar")
+enemyIcon = NodePath("EnemyIcon")
 
 [node name="EnemyIcon" type="TextureRect" parent="." unique_id=1439173]
 layout_direction = 3
@@ -27,6 +32,23 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_lf3xr")
 
-[node name="HealthBar" parent="." unique_id=180018711 instance=ExtResource("3_3lkkg")]
+[node name="PlayerBar" parent="." unique_id=180018711 instance=ExtResource("3_3lkkg")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 12.0
+offset_top = 7.0
+offset_right = 12.0
+offset_bottom = 7.0
+grow_horizontal = 1
+grow_vertical = 1
 
-[editable path="HealthBar"]
+[node name="EnemyBar" parent="." unique_id=80470152 instance=ExtResource("3_3lkkg")]
+offset_left = 88.0
+offset_top = 11.0
+offset_right = 88.0
+offset_bottom = 11.0
+scale = Vector2(-1, -1)
+
+[editable path="PlayerBar"]
+[editable path="EnemyBar"]

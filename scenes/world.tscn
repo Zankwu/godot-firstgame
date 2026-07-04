@@ -36,7 +36,6 @@ script = ExtResource("7_x4q2a")
 
 [node name="Player" parent="acters" unique_id=1715215883 instance=ExtResource("2_4wyf3")]
 position = Vector2(74, 50)
-damage = 55
 speed = 55.0
 flyPwoer = 100.0
 attackPowerDamage = 0
@@ -67,14 +66,13 @@ position = Vector2(19, 28)
 
 [node name="UIcontroller" parent="." unique_id=385669748 instance=ExtResource("7_i7141")]
 
-[node name="HealthBar" parent="UIcontroller" index="2" unique_id=180018711]
-offset_left = 12.0
-offset_top = 7.0
-offset_right = 12.0
-offset_bottom = 7.0
+[node name="PlayerBar" parent="UIcontroller" index="2" unique_id=180018711]
+offset_right = -100.0
+offset_bottom = -64.0
 
 [editable path="acters/Player"]
 [editable path="acters/Player/DamageEmitter"]
 [editable path="acters/Player/DamageReceiver"]
 [editable path="UIcontroller"]
-[editable path="UIcontroller/HealthBar"]
+[editable path="UIcontroller/PlayerBar"]
+[editable path="UIcontroller/EnemyBar"]

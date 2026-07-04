@@ -11,7 +11,6 @@ public partial class HealthBar : Control
 	[Export]
 	public ColorRect Red;
 
-	public int healthBarWidth;
 	public HealthBar()
 	{
 
@@ -19,26 +18,16 @@ public partial class HealthBar : Control
 
 	public override void _Ready()
 	{
-		CallDeferred(nameof(ConnectDamageManager));
+		
 	}
-	private void ConnectDamageManager()
-	{
-		if (DamageManager.Instance != null)
-		{
-			DamageManager.Instance.HealthChange += HandlerHealthChange;
-		}
-	}
-	public override void _Process(double delta)
-	{
-		white.Scale = new Vector2(healthBarWidth+2, white.Scale.Y);
-		Red.Scale = new Vector2(healthBarWidth, Red.Scale.Y);
-		bar.Scale = new Vector2(healthBarWidth, bar.Scale.Y);
-	}
+	
 
 
-	private void HandlerHealthChange(int temp)
+	public void RefreshHealthBar(int currentHealth,int max_health)
 	{
-		healthBarWidth = temp;
+		white.Scale = new Vector2(max_health+2, white.Scale.Y);
+		Red.Scale = new Vector2(max_health, Red.Scale.Y);
+		bar.Scale = new Vector2(currentHealth, bar.Scale.Y);
 	}
 
 }

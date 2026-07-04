@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Security.Cryptography.X509Certificates;
 
 public partial class Stage : Node2D
 {
@@ -12,16 +13,18 @@ public partial class Stage : Node2D
 
     [Export]
     public Node2D checkPoints;
-
+    [Export]
+    public MusicManager.Music stageMusic;
     public override void _Ready()
     {
         CallDeferred(nameof(HandlerOrphanActor));
+        MusicManager.incetance.Play(stageMusic);
     }
 
     public override void _Process(double delta)
     {
-        
-        
+
+
     }
 
     private void HandlerOrphanActor()
